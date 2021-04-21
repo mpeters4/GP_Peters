@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Willkommen beim Blog zum Projekt "PROJEKTITEL"
 
 You can use the [editor on GitHub](https://github.com/mpeters4/GP_Peters/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
