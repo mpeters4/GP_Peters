@@ -1,2 +1,2 @@
 ﻿  main.cpp
-C:\Users\Ich\Documents\GitHub\GP_Peters\GP_Peters\GP_Peters\main.cpp(1,10): fatal error C1083: Datei (Include) kann nicht geöffnet werden: "SDL.h": No such file or directory
+  GP_Peters.vcxproj -> C:\Users\Ich\Documents\GitHub\GP_Peters\GP_Peters\x64\Debug\GP_Peters.exe
