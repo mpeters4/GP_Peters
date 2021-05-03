@@ -1,4 +1,5 @@
-#include "Game.h"
+//#include "Game.h"
+#include "TextureLoader.h"
 #include <iostream>
 
 
@@ -26,9 +27,9 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	else {
 		isRunning = false;
 	}
-	SDL_Surface* tmpSurface = IMG_Load("model/player.png");
-	playerTexture = SDL_CreateTextureFromSurface(renderer, tmpSurface);
-	SDL_FreeSurface(tmpSurface);
+
+	playerTexture = TextureLoader::LoadTexture("model/player.png", renderer);
+
 }
 
 void Game::eventHandler() {
