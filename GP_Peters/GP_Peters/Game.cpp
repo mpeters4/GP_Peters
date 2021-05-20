@@ -48,19 +48,13 @@ void Game::eventHandler() {
 void Game::update() {
 	cnt++;
 	std::cout << move<<"\n";
-	if (cnt % 60 == 0 && cnt < 9000) {
-		move++;
-		destR.x = move;
-		destR.y = move;
-	}else if(cnt % 60 == 0 && cnt > 9000){
-		move--;
-		destR.y = move;
-	}
+
 	
 	destR.w = 64;
 	destR.h = 64;
-	//destR.x = move;
-	//destR.y = move;
+	move = cnt;
+	destR.x = move;
+	destR.y = move;
 	std::cout << "Counter: " << cnt << std::endl;
 }
 
