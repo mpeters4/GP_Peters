@@ -40,15 +40,8 @@ SDL_Texture* TextureLoader::LoadTexture(const char* texture, SDL_Renderer* ren){
 #### Der Spielcharakter
 In den letzten Wochen habe ich außerdem eine erste Idee für das Modell der Spielfigur entworfen. Diese ist noch nicht final, aber reicht vorerst für einige Spieletests aus. 
 <br/>
-![Playercharakter](https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Player.png)
-<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Player.png"  width="200" height="200" />
-![Playercharakter GIF](https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprite%20Monkey%20figure%20GIF.gif)
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Player.png"  width="50" height="150" />
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprite%20Monkey%20figure%20GIF.gif"  width="150" height="150" />
 
-WINDOW
-OBJECT
-FIGUR
-FRAMES
-
-IDEE FÜR JUMPS
-MAP
-KOLLISION
+#### Pläne und erste Ideen für die nächste Woche
+Nächste Woche soll damit begonnen werden, die Spielfigur mit Tastatureingaben zu steuern. Außerdem möchte ich zusätzliche Objekte einfügen und versuchen, eine Kollision zu erzeugen. Dazu werde ich einen Weg finden müssen, die Objekte auch physisch zu platzieren. Eine erste Idee dazu wäre, eine Matrix aufzustellen und die Objekte darin zu platzieren. Die passende Textur könnte dann einfach an diese entsprechende Stelle gesetzt werden. 
