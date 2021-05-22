@@ -16,17 +16,17 @@ Dieser Blog wird mithilfe von Github Pages und Jekyll geführt.
 ### 22.05.2021 Grundlagen von SDL2 verstehen
 Der letzte Monat wurde hauptsächlich damit verbracht, die Grundlagen von SDL2 zu verstehen und mit dessen Nutzung ein wenig warm zu werden. Aus den anfänglich geplanten zwei Wochen wurden krankheitsbedingt nun leider vier. 
 Die folgenden Funktionen wurden aus dieser Testphase erst einmal für "Climb it" übernommen. 
-## Die Game Klasse
+#### Die Game Klasse
 Die Game Klasse beinhaltet die Grundfunktionen des Programms.  
-# Funktion init()
+##### Funktion init()
 Diese Funktion ist dafür zuständig, das Spielfenster zu erstellen. Dazu werden Titel, Auflösung, Position und Modus des Fensters übergeben. Über die SDL_CreateWindow Funktion wird das Fenster dann erstellt und mithilfe von SDL_CreateRenderer ein 2D Renderer für das Fenster erstellt.
-# Funktion eventHandler()
+##### Funktion eventHandler()
 Das verarbeiten von Events wird mithilfe dieser Funktion durchgeführt. Dazu wird ein SDL_Event erstellt und der entsprechende Fall dann ausgeführt. 
-# Funktion render():
+##### Funktion render():
 Das rendern von allen Texturen wird in dieser Funktion ausgeführt. Dazu müssen drei SDL Funktionen ausgeführt werden. Der bei der Initialisierung erstellte Renderer wird zuerst geleert. Dann wird diesem die zu verarbeitende Textur übergeben und zuletzt wird mit SDL_RenderPresent ein Update des Fensters mit der neu geladenen Textur forciert.
-# Funktion clean():
+##### Funktion clean():
 Da das Programm in C++ programmiert wird, muss die sogenannte "garbage collection" manuell durchführt werden. Deshalb wird mit den SDL Funktionen SDL_DestroyWindow und SDL_DestroyRenderer zuerst Fenster und Renderer zerstört um ungewollte Belastung des Arbeitsspeichers nach dem Beenden vorzubeugen. Anschließend wird das Programm mit SDL_Quit beendet.
-## Die TextureLoader Klasse
+#### Die TextureLoader Klasse
 Texturen werden in dem Spiel häufiger geladen. Diese Klasse soll diese Prozedur vereinfachen, da das Laden immer derselben Struktur folgt. Die Funktion benötigt den Pfad der Textur und den Renderer. Die Textur wird jetzt in ein SDL_Surface geladen. Dies ist ein aus dem Bild geladenes Feld mit zugriff auf jedes einzelne Pixel. Danach kann der Renderer die Textur mit SDL_CreateTextureFromSurface laden. Abschließend wird das Feld zerstört und die gerenderte Textur zurückgegeben.
 `SDL_Texture* TextureLoader::LoadTexture(const char* texture, SDL_Renderer* ren){
 	SDL_Surface* tempSur = IMG_Load(texture);
@@ -34,9 +34,9 @@ Texturen werden in dem Spiel häufiger geladen. Diese Klasse soll diese Prozedur
 	SDL_FreeSurface(tempSur);
 	return tex;
 }`
-## Der Spielcharakter
+#### Der Spielcharakter
 In den letzten Wochen habe ich außerdem eine erste Idee für das Modell der Spielfigur entworfen. Diese ist noch nicht final, aber reicht vorerst für einige Spieletests aus. 
-![Image](\img\Player.png)
+![Image](https://github.com/mpeters4/GP_Peters/blob/gh-pages/docs/img/Player.png)
 
 WINDOW
 OBJECT
