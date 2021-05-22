@@ -29,7 +29,7 @@ Da das Programm in C++ programmiert wird, muss die sogenannte "garbage collectio
 #### Die TextureLoader Klasse
 Texturen werden in dem Spiel häufiger geladen. Diese Klasse soll diese Prozedur vereinfachen, da das Laden immer derselben Struktur folgt. Die Funktion benötigt den Pfad der Textur und den Renderer. Die Textur wird jetzt in ein SDL_Surface geladen. Dies ist ein aus dem Bild geladenes Feld mit zugriff auf jedes einzelne Pixel. Danach kann der Renderer die Textur mit SDL_CreateTextureFromSurface laden. Abschließend wird das Feld zerstört und die gerenderte Textur zurückgegeben.
 <br/>
-```
+```cpp
 SDL_Texture* TextureLoader::LoadTexture(const char* texture, SDL_Renderer* ren){  
 	SDL_Surface* tempSur = IMG_Load(texture);  
 	SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, tempSur);    
@@ -39,6 +39,7 @@ SDL_Texture* TextureLoader::LoadTexture(const char* texture, SDL_Renderer* ren){
 ```
 #### Der Spielcharakter
 In den letzten Wochen habe ich außerdem eine erste Idee für das Modell der Spielfigur entworfen. Diese ist noch nicht final, aber reicht vorerst für einige Spieletests aus. 
+<br/>
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Player.png"  width="100" height="100" />
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprite%20Monkey%20figure%20GIF.gif"  width="100" height="100" />
 
