@@ -37,7 +37,7 @@ SDL_Texture* TextureLoader::LoadTexture(const char* texture, SDL_Renderer* ren){
 }```
 #### Der Spielcharakter
 In den letzten Wochen habe ich außerdem eine erste Idee für das Modell der Spielfigur entworfen. Diese ist noch nicht final, aber reicht vorerst für einige Spieletests aus. 
-![Playercharakter](https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Player.png)
+![Playercharakter](https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Player.png =250x250)
 ![Playercharakter GIF](https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprite%20Monkey%20figure%20GIF.gif)
 
 WINDOW
