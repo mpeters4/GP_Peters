@@ -28,12 +28,13 @@ Das rendern von allen Texturen wird in dieser Funktion ausgeführt. Dazu müssen
 Da das Programm in C++ programmiert wird, muss die sogenannte "garbage collection" manuell durchführt werden. Deshalb wird mit den SDL Funktionen SDL_DestroyWindow und SDL_DestroyRenderer zuerst Fenster und Renderer zerstört um ungewollte Belastung des Arbeitsspeichers nach dem Beenden vorzubeugen. Anschließend wird das Programm mit SDL_Quit beendet.
 #### Die TextureLoader Klasse
 Texturen werden in dem Spiel häufiger geladen. Diese Klasse soll diese Prozedur vereinfachen, da das Laden immer derselben Struktur folgt. Die Funktion benötigt den Pfad der Textur und den Renderer. Die Textur wird jetzt in ein SDL_Surface geladen. Dies ist ein aus dem Bild geladenes Feld mit zugriff auf jedes einzelne Pixel. Danach kann der Renderer die Textur mit SDL_CreateTextureFromSurface laden. Abschließend wird das Feld zerstört und die gerenderte Textur zurückgegeben.
-`SDL_Texture* TextureLoader::LoadTexture(const char* texture, SDL_Renderer* ren){
+```cpp
+SDL_Texture* TextureLoader::LoadTexture(const char* texture, SDL_Renderer* ren){
 	SDL_Surface* tempSur = IMG_Load(texture);
 	SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, tempSur);
 	SDL_FreeSurface(tempSur);
 	return tex;
-}`
+}```
 #### Der Spielcharakter
 In den letzten Wochen habe ich außerdem eine erste Idee für das Modell der Spielfigur entworfen. Diese ist noch nicht final, aber reicht vorerst für einige Spieletests aus. 
 ![Playercharakter](https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Player.png)
