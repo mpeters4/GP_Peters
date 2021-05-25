@@ -13,6 +13,8 @@ public:
 	void update();
 	void render();
 	void clean();
+	void loadMap();
+	void drawMap();
 	bool running() { return isRunning; }
 
 private:
