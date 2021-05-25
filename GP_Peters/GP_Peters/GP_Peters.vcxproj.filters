@@ -24,12 +24,18 @@
     <ClCompile Include="TextureLoader.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="TextureLoader.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

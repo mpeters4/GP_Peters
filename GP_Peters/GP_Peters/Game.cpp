@@ -1,10 +1,11 @@
 //#include "Game.h"
 #include "TextureLoader.h"
 #include <iostream>
+#include <ctime>
 
 
 SDL_Texture* playerTexture;
-SDL_Rect destR, srcR;
+SDL_Rect player, srcR;
 int move = 0;
 
 Game::Game() {}
@@ -34,33 +35,63 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 }
 
 void Game::eventHandler() {
-	SDL_Event event;
-	SDL_PollEvent(&event);
-	switch (event.type){
+	SDL_Event e;
+	SDL_PollEvent(&e);
+	switch (e.type){
 	case SDL_QUIT:
 		isRunning = false;
 		break;
+	case SDL_KEYDOWN:
+		if (e.key.keysym.sym == SDLK_LEFT) {
+			std::cout << "LEFT down" << "\n" ;
+			player.x --;
+		}
+		else if (e.key.keysym.sym == SDLK_RIGHT) {
+			std::cout << "RIGHT down" << "\n";
+			player.x ++;
+		}
+		if (e.key.keysym.sym == SDLK_SPACE) {
+			std::cout << "SPACE down" << "\n";
+			/*double elapsed_secs ; 
+			clock_t begin = clock();
+			if(e.key.keysym.sym == SDLK_SPACE)
+			clock_t end = clock();
+			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;*/
+		}
+		break;
+	case SDL_KEYUP:
+		if (e.key.keysym.sym == SDLK_LEFT) {
+			std::cout << "LEFT up" << "\n";
+		}
+		else if (e.key.keysym.sym == SDLK_RIGHT) {
+			std::cout << "RIGHT up" << "\n";
+		}
+		if (e.key.keysym.sym == SDLK_SPACE) {
+			std::cout << "SPACE up" << "\n";
+		}
+		break;
 	default:
 		break;
-	} 
+	}
+
 }
 
 void Game::update() {
 	cnt++;
-	std::cout << move<<"\n";
+	//std::cout << move<<"\n";
 
 	
-	destR.w = 64;
-	destR.h = 64;
-	move = cnt;
-	destR.x = move;
-	destR.y = move;
-	std::cout << "Counter: " << cnt << std::endl;
+	player.w = 64;
+	player.h = 64;
+	//move = cnt;
+	//destR.x = move;
+	//destR.y = move;
+	//std::cout << "Counter: " << cnt << std::endl;
 }
 
 void Game::render() {
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, playerTexture, NULL, &destR);
+	SDL_RenderCopy(renderer, playerTexture, NULL, &player);
 	SDL_RenderPresent(renderer);
 }
 

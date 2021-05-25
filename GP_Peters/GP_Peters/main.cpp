@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "iostream"
 Game* game = nullptr;
 int main(int argc, char *argv[]) {
 	const int FPS = 60;
@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 
 	game = new Game();
 	//Initialisieren des Fensters
-	game->init("Climb it", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false);
+	game->init("Climb it", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, false);
 
 	while (game->running()) {
 		frameStart = SDL_GetTicks();
