@@ -1,6 +1,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include <stdio.h>
+#include "Object.h"
 
 class Game {
 public:
@@ -15,7 +16,9 @@ public:
 	void clean();
 	void loadMap();
 	void drawMap();
-	bool running() { return isRunning; }
+	void draw(Object o);
+	bool running() { return isRunning; };
+	
 
 private:
 	bool isRunning;

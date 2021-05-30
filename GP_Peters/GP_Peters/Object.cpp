@@ -13,6 +13,8 @@ void Object::setSrc(int x, int y, int w, int h) {
 	src.w = w;
 	src.h = h;
 }
-void Object::setImg(std::string filename, SDL_Renderer* renderer) {
-	SDL_Surface* tmpSurf = IMG_Load()
+void Object::setImg(const char* filename, SDL_Renderer* renderer) {
+	SDL_Surface* tmpSurf = IMG_Load(filename);
+	tex = SDL_CreateTextureFromSurface(renderer, tmpSurf);
+	SDL_FreeSurface(tmpSurf);
 }
