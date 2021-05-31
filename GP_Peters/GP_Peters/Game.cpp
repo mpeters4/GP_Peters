@@ -7,9 +7,8 @@ using namespace std;
 
 #define TILE_SIZE 32
 
-SDL_Texture* playerTexture;
+
 Object player;
-SDL_Rect desR, srcR;
 int move = 0;
 
 Game::Game() {}
@@ -34,13 +33,12 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		isRunning = false;
 	}
 	
-	player.setDest(50, 50, 64, 64);
+	player.setDest(800, 672, 64, 64);
 	player.setSrc(0, 0, 64, 64);
 	player.setImg("model/player.png", renderer);
 
 	loadMap("res/1.map");
 
-	playerTexture = TextureLoader::LoadTexture("model/player.png", renderer);
 }
 
 void Game::eventHandler() {
@@ -53,11 +51,13 @@ void Game::eventHandler() {
 	case SDL_KEYDOWN:
 		if (e.key.keysym.sym == SDLK_LEFT) {
 			std::cout << "LEFT down" << "\n" ;
-			desR.x --;
+			player.dest.x--;
+
 		}
 		else if (e.key.keysym.sym == SDLK_RIGHT) {
 			std::cout << "RIGHT down" << "\n";
-			desR.x ++;
+			player.dest.x++;
+
 		}
 		if (e.key.keysym.sym == SDLK_SPACE) {
 			std::cout << "SPACE down" << "\n";
@@ -96,10 +96,6 @@ void Game::draw(Object o) {
 void Game::update() {
 	cnt++;
 	//std::cout << move<<"\n";
-
-	
-	desR.w = 64;
-	desR.h = 64;
 	//move = cnt;
 	//destR.x = move;
 	//destR.y = move;
@@ -108,10 +104,8 @@ void Game::update() {
 
 void Game::render() {
 	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, playerTexture, NULL, &desR);
-	//SDL_RenderPresent(renderer);
-	draw(player);
 	drawMap();
+	draw(player);
 	SDL_RenderPresent(renderer);
 }
 
@@ -150,7 +144,7 @@ void Game::loadMap(const char* filename) {
 void Game::drawMap() {
 	for (int i = 0; i < map.size(); i++) {
 		draw(map[i]);
-		cout << "drawing tile on x: " << map[i].getDest().x << " y: " << map[i].getDest().y << endl;
+		//cout << "drawing tile on x: " << map[i].getDest().x << " y: " << map[i].getDest().y << endl;
 	}
 }
 
@@ -160,4 +154,5 @@ void Game::clean() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
+
 }
