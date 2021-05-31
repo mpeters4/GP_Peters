@@ -23,7 +23,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		window = SDL_CreateWindow(title, x, y, width, height, fs);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer) {
-			SDL_SetRenderDrawColor(renderer, 100, 150, 100, 255);
+			SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
 		}
 		isRunning = true;
 	}
@@ -109,6 +109,17 @@ void Game::render() {
 
 	SDL_RenderPresent(renderer);
 }
+
+
+void loadMap(const char* filename) {
+
+}
+
+void drawMap() {
+
+}
+
+
 
 void Game::clean() {
 	SDL_DestroyWindow(window);
