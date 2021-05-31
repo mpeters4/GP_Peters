@@ -18,3 +18,7 @@ void Object::setImg(const char* filename, SDL_Renderer* renderer) {
 	tex = SDL_CreateTextureFromSurface(renderer, tmpSurf);
 	SDL_FreeSurface(tmpSurf);
 }
+
+void Object::setSolid(bool solid) {
+	Object::solid = solid;
+}
