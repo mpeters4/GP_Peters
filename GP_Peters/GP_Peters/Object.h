@@ -5,10 +5,12 @@
 
 class Object {
 private:
-	SDL_Rect dest, src;
+	//SDL_Rect dest, src;
+	SDL_Rect src;
 	SDL_Texture* tex;
 	bool solid;
 public:
+	SDL_Rect dest;
 	Object() { solid = true; };
 	SDL_Rect getDest() const { return dest; };
 	SDL_Rect getSrc() const { return src; };
