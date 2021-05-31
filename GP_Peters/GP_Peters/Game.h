@@ -1,9 +1,11 @@
+#pragma once
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Object.h"
 
 #include <stdio.h>
 #include <vector>
+#include <fstream>
 
 class Game {
 public:
@@ -16,8 +18,6 @@ public:
 	void update();
 	void render();
 	void clean();
-	void loadMap();
-	void drawMap();
 	void draw(Object o);
 	void loadMap(const char* filename);
 	void drawMap();

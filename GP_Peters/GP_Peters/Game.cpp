@@ -1,11 +1,15 @@
-//#include "Game.h"
+#include "Game.h"
 #include "TextureLoader.h"
 #include <iostream>
 #include <ctime>
 
+using namespace std;
+
+#define TILE_SIZE 32
 
 SDL_Texture* playerTexture;
 Object player;
+Object maap;
 SDL_Rect desR, srcR;
 int move = 0;
 
@@ -31,9 +35,14 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		isRunning = false;
 	}
 	
-	player.setDest(50, 50, 128, 300);
+	player.setDest(50, 50, 64, 64);
 	player.setSrc(0, 0, 64, 64);
 	player.setImg("model/player.png", renderer);
+	maap.setDest(500, 500, 64, 32);
+	maap.setSrc(0, 0, 64, 32);
+	maap.setImg("model/tiles.png", renderer);
+
+	loadMap("res/1.map");
 
 	playerTexture = TextureLoader::LoadTexture("model/player.png", renderer);
 }
@@ -106,17 +115,51 @@ void Game::render() {
 	SDL_RenderCopy(renderer, playerTexture, NULL, &desR);
 	//SDL_RenderPresent(renderer);
 	draw(player);
-
+	draw(maap);
+	drawMap();
 	SDL_RenderPresent(renderer);
 }
 
 
-void loadMap(const char* filename) {
-
+void Game::loadMap(const char* filename) {
+	int current, x, y, w, h;
+	std::ifstream in(filename);
+	if (!in.is_open()) {
+		cerr << "ERROR wit loading file: " << filename << endl;
+		return;
+	}
+	in >> w;
+	in >> h;
+	in >> x;
+	in >> y;
+	cout << w << endl << h << endl << x << endl << y << endl;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			if (in.eof()) {
+				cerr << "Map reading ERROR" << endl;
+				return;
+			}
+			in >> current;
+			cout << "current " << current << endl;
+			if (current != 0) {
+				cout << "creating Object " << current << endl;
+				Object tmp;
+				tmp.setImg("model/tiles.png", renderer);
+				tmp.setSrc(((current - 1)*TILE_SIZE), 0, TILE_SIZE, TILE_SIZE);
+				tmp.setDest((j*TILE_SIZE )+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
+				map.push_back(tmp);
+			}
+		}
+	}
+	in.close();
 }
 
-void drawMap() {
-
+void Game::drawMap() {
+	cout << "DRAWING MAP" << endl << "size: " << map.size() << endl;
+	for (int i = 0; i < map.size(); i++) {
+		draw(map[i]);
+		cout << "drawing tile on x: " << map[i].getDest().x << " y: " << map[i].getDest().y << endl;
+	}
 }
 
 
