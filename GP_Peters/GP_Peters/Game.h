@@ -1,7 +1,9 @@
 #include "SDL.h"
 #include "SDL_image.h"
-#include <stdio.h>
 #include "Object.h"
+
+#include <stdio.h>
+#include <vector>
 
 class Game {
 public:
@@ -17,6 +19,8 @@ public:
 	void loadMap();
 	void drawMap();
 	void draw(Object o);
+	void loadMap(const char* filename);
+	void drawMap();
 	bool running() { return isRunning; };
 	
 
@@ -25,4 +29,5 @@ private:
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 	int cnt = 0;
+	std::vector<Object> map;
 };
