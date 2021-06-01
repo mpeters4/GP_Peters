@@ -89,7 +89,7 @@ if (current != 0) {
 ```
 Mithilfe von drawmap wird dann das Feld aus dem Objectvektor erstellt. Zur Verdeutlichung habe ich eine kleine Matrix angelegt und daraus ein Bild generiert.
 ```
-5 5			(5x5 Matrix)
+5 5		(5x5 Matrix)
 0 32		(Beginn bei X=0, Y=32)
 00 00 03 00 00 
 00 01 01 01 00 
