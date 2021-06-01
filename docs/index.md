@@ -46,3 +46,49 @@ In den letzten Wochen habe ich außerdem eine erste Idee für das Modell der Spi
 
 #### Pläne und erste Ideen für die nächste Woche
 Nächste Woche soll damit begonnen werden, die Spielfigur mit Tastatureingaben zu steuern. Außerdem möchte ich zusätzliche Objekte einfügen und versuchen, eine Kollision zu erzeugen. Dazu werde ich einen Weg finden müssen, die Objekte auch physisch zu platzieren. Eine erste Idee dazu wäre, eine Matrix aufzustellen und die Objekte darin zu platzieren. Die passende Textur könnte dann einfach an diese entsprechende Stelle gesetzt werden. 
+
+### 31.05.2021 Spielfigur bewegen und Map generieren
+Folgende Fortschritte wurden in der letzten Woche erzielt:
+- Laden der Texturen überarbeitet
+- Erste Bewegung der Figur mit Tastatureingaben
+- Spielfeld generieren (vorerst nur optisch)
+
+#### Laden der Texturen mithilfe der Object Klasse
+Für das platzieren von Texturen werden neben der Bilddatei selbst zwei Informationen benötigt. Zum einen wird die Quelle des Bildes (Source) gebraucht. Dazu wird mit SDL_Rect ein Rechteck mit dem gewünschten Bildausschnitt erzeugt. Es wird angegeben bei welchen Koordinaten innerhalb der Textur der Ausschnitt beginnt und wie hoch bzw. breit dieser ist. Zum anderen wird der Zielort(Destination) bestimmt. Hier wird ebenfalls ein Rechteck erzeugt. Es werden die Koordinaten des Zielorts und die Größe der Textur benötigt. Mit dem Destination Rechteck ist es zusätzlich möglich, die Textur zu skalieren. <br/>Um das Generieren und rendern von vielen Objekten zu erleichtern, habe ich die Object Klasse hinzugefügt. Diese enthält den Dateipfad und die beiden benötigten SDL_Rect Variablen.
+#### Bewegen der Figur und erfassen von Tastatureingaben
+Mithilfe von SDL_KEYDOWN bzw. SDL_KEYUP, lässt sich genau festhalten, wann die jeweilige Taste betätigt und wieder losgelassen wird. Dies ist sehr praktisch für meine Steuerung, da ich die Sprungkraft von der Dauer des Tastendruckes abhängig machen möchte. In dem EventHandler wird ermittelt, ob eine der getrackten Tasten verwendet wird, und wenn ja, welche. Wird eine Taste gedrückt, ermittelt der EventHandler in einer switch-case Anweisung, ob es eine relevante Taste ist. Ist dies der Fall, wird der zugehörige Case ausgeführt. Wird beispielsweise die "links"-Taste gedrückt, verringert sich die X-Koordinate der Spielfigur über das Destination Rechteck und die Figur bewegt sich somit nach links.```cpp
+switch (e.type){
+	case SDL_KEYDOWN:
+		if (e.key.keysym.sym == SDLK_LEFT) {
+			std::cout << "LEFT down" << "\n" ;
+			player.dest.x--;
+		}
+```
+#### Generieren des Spielfeldes
+Das Spielfeld wird in einer .map Datei gespeichert. In dieser wird in einer Matrix abgebildet, wie die Karte aufgebaut ist. Die ersten zwei Ziffern beschreiben die Größe der Matrix. Mit der dritten und vierten wird der Startpunkt festgelegt. Jedes weitere Feld beschreibt die Matrix selbst und steht für ein 32x32 Pixel großes Feld auf dem Spielfeld. Mithilfe von Nummern wird dann dargestellt, wie dieses aussehen soll. Die loadmap Funktion soll diese Matrix auslesen und für jedes Feld, dass nicht 0 ist, ein Objekt erzeugen. Diese werden dann in einem Vector gespeichert. Somit ist es möglich, eine Bilddatei mit allen Texturen für die Karte zu erstellen und die zugehörigen Ausschnitte entsprechend rauszuschneiden. Ich habe hier zu Testzwecken eine Datei mit drei unterschiedlichen Feldern erstellt. Diese sieht wie folgt aus:
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/tiles.png"/>
+Steht beispielsweise eine 1 in der Matrix, wird die Source für X und Y auf 0 gesetzt und das erste Feld wird verwendet. Bei einer 2 wird bei X=32 angefangen, aus der Textur zu schneiden usw.
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/tiles_numbers.png"/>
+```cpp
+	//INFO: TILE_SIZE = 32
+	in >> current;
+	if (current != 0) {
+		Object tmp;
+		tmp.setImg("model/tiles.png", renderer);
+		tmp.setSrc(((current - 1)*TILE_SIZE), 0, TILE_SIZE, TILE_SIZE);
+		tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
+		map.push_back(tmp);
+	}
+```
+Mithilfe von drawmap wird dann das Feld aus dem Objectvektor erstellt. Zur Verdeutlichung habe ich eine kleine Matrix angelegt und daraus ein Bild generiert.
+``
+5 5			(5x5 Matrix)
+0 32		(Beginn bei X=0, Y=32)
+00 00 03 00 00 
+00 01 01 01 00 
+00 02 01 02 00 
+00 03 01 01 00 
+00 00 02 00 00 
+``
+Das daraus entstandene Spielfeld sieht wie folgt aus:
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/doc.map_screen-png"/>
