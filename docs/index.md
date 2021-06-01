@@ -88,7 +88,7 @@ Steht beispielsweise eine 1 in der Matrix, wird die Source für X und Y auf 0 ge
 	}
 ```
 Mithilfe von drawmap wird dann das Feld aus dem Objectvektor erstellt. Zur Verdeutlichung habe ich eine kleine Matrix angelegt und daraus ein Bild generiert.
-``
+```
 5 5			(5x5 Matrix)
 0 32		(Beginn bei X=0, Y=32)
 00 00 03 00 00 
@@ -96,6 +96,6 @@ Mithilfe von drawmap wird dann das Feld aus dem Objectvektor erstellt. Zur Verde
 00 02 01 02 00 
 00 03 01 01 00 
 00 00 02 00 00 
-``
+```
 Das daraus entstandene Spielfeld sieht wie folgt aus:
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/doc.map_screen-png"/>
