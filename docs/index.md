@@ -67,9 +67,14 @@ switch (e.type){
 ```
 
 #### Generieren des Spielfeldes
-Das Spielfeld wird in einer .map Datei gespeichert. In dieser wird in einer Matrix abgebildet, wie die Karte aufgebaut ist. Die ersten zwei Ziffern beschreiben die Größe der Matrix. Mit der dritten und vierten wird der Startpunkt festgelegt. Jedes weitere Feld beschreibt die Matrix selbst und steht für ein 32x32 Pixel großes Feld auf dem Spielfeld. Mithilfe von Nummern wird dann dargestellt, wie dieses aussehen soll. Die loadmap Funktion soll diese Matrix auslesen und für jedes Feld, dass nicht 0 ist, ein Objekt erzeugen. Diese werden dann in einem Vector gespeichert. Somit ist es möglich, eine Bilddatei mit allen Texturen für die Karte zu erstellen und die zugehörigen Ausschnitte entsprechend rauszuschneiden. Ich habe hier zu Testzwecken eine Datei mit drei unterschiedlichen Feldern erstellt. Diese sieht wie folgt aus:
+Das Spielfeld wird in einer .map Datei gespeichert. In dieser wird in einer Matrix abgebildet, wie die Karte aufgebaut ist. Die ersten zwei Ziffern beschreiben die Größe der Matrix. Mit der dritten und vierten wird der Startpunkt festgelegt. Jedes weitere Feld beschreibt die Matrix selbst und steht für ein 32x32 Pixel großes Feld auf dem Spielfeld. Mithilfe von Nummern wird dann dargestellt, wie dieses aussehen soll. Die loadmap Funktion soll diese Matrix auslesen und für jedes Feld, dass nicht 0 ist, ein Objekt erzeugen. Diese werden dann in einem Vector gespeichert. Somit ist es möglich, eine Bilddatei mit allen Texturen für die Karte zu erstellen und die zugehörigen Ausschnitte entsprechend rauszuschneiden. Ich habe hier zu Testzwecken eine Datei mit drei unterschiedlichen Feldern erstellt. 
+<br/>
+Diese sieht wie folgt aus:
+<br/>
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/tiles.png"/>
+<br/>
 Steht beispielsweise eine 1 in der Matrix, wird die Source für X und Y auf 0 gesetzt und das erste Feld wird verwendet. Bei einer 2 wird bei X=32 angefangen, aus der Textur zu schneiden usw.
+<br/>
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/tiles_numbers.png"/>
 ```cpp
 	//INFO: TILE_SIZE = 32
