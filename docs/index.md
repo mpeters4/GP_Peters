@@ -1,4 +1,4 @@
-## Willkommen beim Blog zu meinem Projekt "Climb it"
+## Willkommen beim Blog zu meinem Projekt <br/> "Climb it"
 ### Projektidee
 Mein Projekt soll eine Art "jump ’n’ run" werden. Bei dem Spielprinzip orientiere ich mich an dem Spiel "Jump King". In diesem Spiel ist es die Aufgabe, einen Turm zu erklimmen. Dies gestaltet sich durch die einzigartige Steuerung aber schwieriger als es zunächst klingt. Die Spielfigur springt, sobald die Sprungtaste losgelassen wird. Je länger diese Taste vorher gedrückt gehalten wird, desto höher springt die Figur. Durch Kollision mit Objekten prallt die Figur von diesen ab. Der Abprall nach der Kollision soll mit der vorher aufgeladenen Sprungkraft verechnet werden und somit variabel sein. 
 <br/>Dieses Spielkonzept lässt mir sehr viele Möglichkeiten zur Erweiterung, wie zum Beispiel:
@@ -57,6 +57,7 @@ Folgende Fortschritte wurden in der letzten Woche erzielt:
 Für das platzieren von Texturen werden neben der Bilddatei selbst zwei Informationen benötigt. Zum einen wird die Quelle des Bildes (Source) gebraucht. Dazu wird mit SDL_Rect ein Rechteck mit dem gewünschten Bildausschnitt erzeugt. Es wird angegeben bei welchen Koordinaten innerhalb der Textur der Ausschnitt beginnt und wie hoch bzw. breit dieser ist. Zum anderen wird der Zielort(Destination) bestimmt. Hier wird ebenfalls ein Rechteck erzeugt. Es werden die Koordinaten des Zielorts und die Größe der Textur benötigt. Mit dem Destination Rechteck ist es zusätzlich möglich, die Textur zu skalieren. <br/>Um das Generieren und rendern von vielen Objekten zu erleichtern, habe ich die Object Klasse hinzugefügt. Diese enthält den Dateipfad und die beiden benötigten SDL_Rect Variablen.
 #### Bewegen der Figur und erfassen von Tastatureingaben
 Mithilfe von SDL_KEYDOWN bzw. SDL_KEYUP, lässt sich genau festhalten, wann die jeweilige Taste betätigt und wieder losgelassen wird. Dies ist sehr praktisch für meine Steuerung, da ich die Sprungkraft von der Dauer des Tastendruckes abhängig machen möchte. In dem EventHandler wird ermittelt, ob eine der getrackten Tasten verwendet wird, und wenn ja, welche. Wird eine Taste gedrückt, ermittelt der EventHandler in einer switch-case Anweisung, ob es eine relevante Taste ist. Ist dies der Fall, wird der zugehörige Case ausgeführt. Wird beispielsweise die "links"-Taste gedrückt, verringert sich die X-Koordinate der Spielfigur über das Destination Rechteck und die Figur bewegt sich somit nach links.```cpp
+```cpp
 switch (e.type){
 	case SDL_KEYDOWN:
 		if (e.key.keysym.sym == SDLK_LEFT) {
