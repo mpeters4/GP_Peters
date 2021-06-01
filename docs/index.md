@@ -98,4 +98,5 @@ Mithilfe von drawmap wird dann das Feld aus dem Objectvektor erstellt. Zur Verde
 00 00 02 00 00 
 ```
 Das daraus entstandene Spielfeld sieht wie folgt aus:
-<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/doc.map_screen-png"/>
+<br/>
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/doc.map_screen.png"/>
