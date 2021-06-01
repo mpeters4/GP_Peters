@@ -77,15 +77,15 @@ Steht beispielsweise eine 1 in der Matrix, wird die Source für X und Y auf 0 ge
 <br/>
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/tiles_numbers.png"/>
 ```cpp
-	//INFO: TILE_SIZE = 32
-	in >> current;
-	if (current != 0) {
-		Object tmp;
-		tmp.setImg("model/tiles.png", renderer);
-		tmp.setSrc(((current - 1)*TILE_SIZE), 0, TILE_SIZE, TILE_SIZE);
-		tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
-		map.push_back(tmp);
-	}
+//INFO: TILE_SIZE = 32
+in >> current;
+if (current != 0) {
+	Object tmp;
+	tmp.setImg("model/tiles.png", renderer);
+	tmp.setSrc(((current - 1)*TILE_SIZE), 0, TILE_SIZE, TILE_SIZE);
+	tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
+	map.push_back(tmp);
+}
 ```
 Mithilfe von drawmap wird dann das Feld aus dem Objectvektor erstellt. Zur Verdeutlichung habe ich eine kleine Matrix angelegt und daraus ein Bild generiert.
 ```
