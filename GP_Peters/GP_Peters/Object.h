@@ -5,12 +5,12 @@
 
 class Object {
 private:
-	//SDL_Rect dest, src;
-	SDL_Rect src;
+	SDL_Rect dest, src;
+	//SDL_Rect src;
 	SDL_Texture* tex;
 	bool solid;
 public:
-	SDL_Rect dest;
+	//SDL_Rect dest;
 	Object() { solid = true; };
 	SDL_Rect getDest() const { return dest; };
 	SDL_Rect getSrc() const { return src; };
@@ -20,6 +20,6 @@ public:
 	void setSrc(int x, int y, int w, int h);
 	void setImg(const char* filename, SDL_Renderer* renderer);
 	void setSolid(bool solid);
-	void move(int dir);
+	void move(int dir, int speed);
 
 };
