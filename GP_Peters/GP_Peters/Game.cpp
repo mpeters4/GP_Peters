@@ -10,6 +10,9 @@ using namespace std;
 
 Object player;
 int move = 0;
+bool jumpCharge = false;
+Uint32 jumpTimer = 0;
+const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
 Game::Game() {}
 Game::~Game() {
@@ -38,6 +41,8 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	player.setImg("model/player.png", renderer);
 
 	loadMap("res/1.map");
+	
+	
 
 }
 
@@ -54,13 +59,32 @@ void Game::eventHandler() {
 			player.dest.x--;
 
 		}
-		else if (e.key.keysym.sym == SDLK_RIGHT) {
+		if (e.key.keysym.sym == SDLK_RIGHT) {
 			std::cout << "RIGHT down" << "\n";
 			player.dest.x++;
 
 		}
+		if (keystate[SDL_SCANCODE_RIGHT] && keystate[SDL_SCANCODE_UP]) {
+			printf("Right and Up Keys Pressed.\n");
+		}
+		if (keystate[SDL_SCANCODE_RIGHT] && !keystate[SDL_SCANCODE_UP]) {
+			printf("Right Key Pressed.\n");
+		}
 		if (e.key.keysym.sym == SDLK_SPACE) {
+			
 			std::cout << "SPACE down" << "\n";
+			if (!jumpCharge) {
+				jumpTimer = SDL_GetTicks();
+				jumpCharge = true;
+			}
+			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
+				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump!" << endl;
+				jumpCharge = false;
+			}
+			
+			
+			
+			
 			/*double elapsed_secs ; 
 			clock_t begin = clock();
 			if(e.key.keysym.sym == SDLK_SPACE)
@@ -77,6 +101,11 @@ void Game::eventHandler() {
 		}
 		if (e.key.keysym.sym == SDLK_SPACE) {
 			std::cout << "SPACE up" << "\n";
+			if (jumpCharge) {
+				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl;
+				jumpCharge = false;
+			} 
+			
 		}
 		break;
 	default:
@@ -94,7 +123,7 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	cnt++;
+	//cnt++;
 	//std::cout << move<<"\n";
 	//move = cnt;
 	//destR.x = move;
@@ -107,11 +136,14 @@ void Game::render() {
 	drawMap();
 	draw(player);
 	SDL_RenderPresent(renderer);
+	
 }
 
 
 void Game::loadMap(const char* filename) {
 	int current, x, y, w, h;
+	Object tmp;
+	tmp.setImg("model/tiles.png", renderer);
 	std::ifstream in(filename);
 	if (!in.is_open()) {
 		cerr << "ERROR wit loading file: " << filename << endl;
@@ -130,10 +162,9 @@ void Game::loadMap(const char* filename) {
 			}
 			in >> current;
 			if (current != 0) {
-				Object tmp;
-				tmp.setImg("model/tiles.png", renderer);
+				
 				tmp.setSrc(((current - 1)*TILE_SIZE), 0, TILE_SIZE, TILE_SIZE);
-				tmp.setDest((j*TILE_SIZE )+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
+				tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
 				map.push_back(tmp);
 			}
 		}
