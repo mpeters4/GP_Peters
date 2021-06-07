@@ -21,6 +21,7 @@ public:
 	void draw(Object o);
 	void loadMap(const char* filename);
 	void drawMap();
+	bool checkCollision(Object a, Object b);
 	bool running() { return isRunning; };
 	
 

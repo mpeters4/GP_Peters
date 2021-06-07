@@ -56,40 +56,51 @@ void Game::eventHandler() {
 	case SDL_KEYDOWN:
 		if (e.key.keysym.sym == SDLK_LEFT) {
 			std::cout << "LEFT down" << "\n" ;
-			player.dest.x--;
+			player.move(-1, 1);
 
 		}
 		if (e.key.keysym.sym == SDLK_RIGHT) {
 			std::cout << "RIGHT down" << "\n";
-			player.dest.x++;
+			player.move(1, 1);
 
 		}
-		if (keystate[SDL_SCANCODE_RIGHT] && keystate[SDL_SCANCODE_UP]) {
-			printf("Right and Up Keys Pressed.\n");
-		}
-		if (keystate[SDL_SCANCODE_RIGHT] && !keystate[SDL_SCANCODE_UP]) {
-			printf("Right Key Pressed.\n");
-		}
-		if (e.key.keysym.sym == SDLK_SPACE) {
-			
-			std::cout << "SPACE down" << "\n";
+		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_LEFT]) {
+			printf("LEFT and SPACE Keys Pressed.\n");
 			if (!jumpCharge) {
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
 			}
 			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
 				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump!" << endl;
+
 				jumpCharge = false;
+				player.move(0, 32);
+				player.move(-1, 32);
+
 			}
+			//player.move(-1, 32);
+		}
+		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_RIGHT]) {
+			printf("RIGHT and SPACE Keys Pressed.\n");
+			//player.move(1, 32);
+		}
+
+		if (e.key.keysym.sym == SDLK_SPACE) {
 			
-			
-			
-			
-			/*double elapsed_secs ; 
-			clock_t begin = clock();
-			if(e.key.keysym.sym == SDLK_SPACE)
-			clock_t end = clock();
-			elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;*/
+			std::cout << "SPACE down" << "\n";
+
+			if (!jumpCharge) {
+				jumpTimer = SDL_GetTicks();
+				jumpCharge = true;
+			}
+			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
+				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump!" << endl;
+				
+				jumpCharge = false;
+				player.move(0, TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
+				
+			}
+
 		}
 		break;
 	case SDL_KEYUP:
@@ -102,10 +113,11 @@ void Game::eventHandler() {
 		if (e.key.keysym.sym == SDLK_SPACE) {
 			std::cout << "SPACE up" << "\n";
 			if (jumpCharge) {
-				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl;
+				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "Jumpheight: " << TILE_SIZE*(SDL_GetTicks() - jumpTimer) * 0.001 << endl;
+
+				player.move(0, TILE_SIZE *(SDL_GetTicks() - jumpTimer) *0.001);
 				jumpCharge = false;
 			} 
-			
 		}
 		break;
 	default:
@@ -123,8 +135,9 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	//cnt++;
-	//std::cout << move<<"\n";
+	cnt++;
+
+	//std::cout << "Frame: "<< cnt << "\n";
 	//move = cnt;
 	//destR.x = move;
 	//destR.y = move;
@@ -177,6 +190,10 @@ void Game::drawMap() {
 		draw(map[i]);
 		//cout << "drawing tile on x: " << map[i].getDest().x << " y: " << map[i].getDest().y << endl;
 	}
+}
+
+bool Game::checkCollision(Object a, Object b) {
+	
 }
 
 
