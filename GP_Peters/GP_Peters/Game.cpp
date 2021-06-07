@@ -9,10 +9,19 @@ using namespace std;
 
 
 Object player;
-int move = 0;
+int m = 0;
 bool jumpCharge = false;
 Uint32 jumpTimer = 0;
 const Uint8* keystate = SDL_GetKeyboardState(NULL);
+int velocity; 
+int gravity = 1;
+bool fall = true;
+bool jump = false;
+//TEST JUMP motion
+float flPrevTime = 0;
+float flCurTime = SDL_GetTicks();
+float dt;
+float jumpHeight = 0;
 
 Game::Game() {}
 Game::~Game() {
@@ -36,8 +45,8 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		isRunning = false;
 	}
 	
-	player.setDest(800, 672, 64, 64);
-	player.setSrc(0, 0, 64, 64);
+	player.setDest(800, 672, 52, 64);
+	player.setSrc(12, 0, 52, 64);
 	player.setImg("model/player.png", renderer);
 
 	loadMap("res/1.map");
@@ -55,14 +64,15 @@ void Game::eventHandler() {
 		break;
 	case SDL_KEYDOWN:
 		if (e.key.keysym.sym == SDLK_LEFT) {
-			std::cout << "LEFT down" << "\n" ;
-			player.move(-1, 1);
-
+			std::cout << "LEFT down" << "\n";	
+			//player.move(-1, 1);
+			m = -1;
+			
 		}
 		if (e.key.keysym.sym == SDLK_RIGHT) {
 			std::cout << "RIGHT down" << "\n";
-			player.move(1, 1);
-
+			//player.move(1, 1);
+			m = 1;
 		}
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_LEFT]) {
 			printf("LEFT and SPACE Keys Pressed.\n");
@@ -94,10 +104,17 @@ void Game::eventHandler() {
 				jumpCharge = true;
 			}
 			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
-				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump!" << endl;
+				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump! " <<  endl;
+				if (!jump) {
+					
+
+					//player.move(2, TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
+					jumpHeight = player.getDest().y- (TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001) ;
+					cout << jumpHeight <<endl;
+					jump = true;
+
+				}
 				
-				jumpCharge = false;
-				player.move(0, TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
 				
 			}
 
@@ -114,9 +131,14 @@ void Game::eventHandler() {
 			std::cout << "SPACE up" << "\n";
 			if (jumpCharge) {
 				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "Jumpheight: " << TILE_SIZE*(SDL_GetTicks() - jumpTimer) * 0.001 << endl;
+				if (!jump) {
 
-				player.move(0, TILE_SIZE *(SDL_GetTicks() - jumpTimer) *0.001);
-				jumpCharge = false;
+					//player.move(2, TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
+					jumpHeight = player.getDest().y - (TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001) ;
+
+					jump = true;
+
+				}
 			} 
 		}
 		break;
@@ -135,14 +157,39 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	cnt++;
-
-	//std::cout << "Frame: "<< cnt << "\n";
-	//move = cnt;
-	//destR.x = move;
-	//destR.y = move;
-	//std::cout << "Counter: " << cnt << std::endl;
+	if (jump) {
+		cout << "JUMP: " << jump << "JUMPHEIGHT: " << jumpHeight << "PY " << player.getDest().y << endl;
+		flPrevTime = flCurTime;
+		flCurTime = SDL_GetTicks();
+		dt = (flCurTime - flPrevTime) * 0.1;
+		if (dt >= 1.5) {
+			dt = 1.5;
+		}
+		cout << "dt " << dt << endl;
+		if (player.getDest().y <= jumpHeight) {
+			jump = false;
+			jumpCharge = false;
+		}
+		player.move(2, dt);
+	}
+	else {
+		fall = true;
+	}
+	for (int i = 0; i < map.size(); i++) {
+		if (checkCollision(player, map[i])) {
+			//cout << "Collision with block " << i << endl;
+			fall = false;
+		}
+	}
+	if (m != 0) {
+			player.move(m, 1);
+			m = 0;
+	}
+	if (fall) {
+		player.move(-2, gravity);
+	}
 }
+
 
 void Game::render() {
 	SDL_RenderClear(renderer);
@@ -193,7 +240,46 @@ void Game::drawMap() {
 }
 
 bool Game::checkCollision(Object a, Object b) {
+	//The sides of the rectangles
+	int leftA, leftB;
+	int rightA, rightB;
+	int topA, topB;
+	int bottomA, bottomB;
+
+	//Calculate the sides of Obj A
+	leftA = a.getDest().x;
+	rightA = a.getDest().x + a.getDest().w;
+	topA = a.getDest().y;
+	bottomA = a.getDest().y + a.getDest().h;
+
+	//Calculate the sides of Obj B
+	leftB = b.getDest().x;
+	rightB = b.getDest().x + b.getDest().w;
+	topB = b.getDest().y;
+	bottomB = b.getDest().y + b.getDest().h;
+	//If any of the sides from A are outside of B
+	if (bottomA <= topB)
+	{
+		return false;
+	}
+
+	if (topA >= bottomB)
+	{
+		return false;
+	}
+
+	if (rightA <= leftB)
+	{
+		return false;
+	}
+
+	if (leftA >= rightB)
+	{
+		return false;
+	}
 	
+	//If none of the sides from A are outside B
+	return true;
 }
 
 
