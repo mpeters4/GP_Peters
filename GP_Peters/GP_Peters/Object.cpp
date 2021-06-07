@@ -25,15 +25,24 @@ void Object::setSolid(bool solid) {
 	Object::solid = solid;
 }
 
-void Object::move(int dir, int speed) {
+//
+void Object::move(int dir, int velocity) {
+	//RIGHT
 	if (dir == 1) {
-		dest.x += speed;
+		dest.x += velocity;
 	}
+	//LEFT
 	if (dir == -1) {
-		dest.x -= speed;
+		dest.x -= velocity;
 	}
-	if (dir == 0) {
-		dest.y -= speed;
+	//UP
+	if (dir == 2) {
+		dest.y -= velocity;
 	}
+	//DOWN
+	if (dir == -2) {
+		dest.y += velocity;
+	}
+
 
 }
