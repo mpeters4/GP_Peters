@@ -14,7 +14,7 @@ bool jumpCharge = false;
 Uint32 jumpTimer = 0;
 const Uint8* keystate = SDL_GetKeyboardState(NULL);
 int velocity; 
-int gravity = 1;
+int gravity = 2;
 bool fall = true;
 bool jump = false;
 //TEST JUMP motion
@@ -157,24 +157,7 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	if (jump) {
-		cout << "JUMP: " << jump << "JUMPHEIGHT: " << jumpHeight << "PY " << player.getDest().y << endl;
-		flPrevTime = flCurTime;
-		flCurTime = SDL_GetTicks();
-		dt = (flCurTime - flPrevTime) * 0.1;
-		if (dt >= 1.5) {
-			dt = 1.5;
-		}
-		cout << "dt " << dt << endl;
-		if (player.getDest().y <= jumpHeight) {
-			jump = false;
-			jumpCharge = false;
-		}
-		player.move(2, dt);
-	}
-	else {
-		fall = true;
-	}
+	calcJump();
 	for (int i = 0; i < map.size(); i++) {
 		if (checkCollision(player, map[i])) {
 			//cout << "Collision with block " << i << endl;
@@ -284,7 +267,27 @@ bool Game::checkCollision(Object a, Object b) {
 	return true;
 }
 
-void Game::calcJump();
+void Game::calcJump() {
+	if (jump) {
+		cout << "JUMP: " << jump << "JUMPHEIGHT: " << jumpHeight << "PY " << player.getDest().y << endl;
+		flPrevTime = flCurTime;
+		flCurTime = SDL_GetTicks();
+		dt = (flCurTime - flPrevTime) * 0.1;
+		cout << "dt " << dt << endl;
+		if (dt >= 1.5) {
+			dt = 1.5;
+		}
+
+		if (player.getDest().y <= jumpHeight) {
+			jump = false;
+			jumpCharge = false;
+		}
+		player.move(2, dt);
+	}
+	else {
+		fall = true;
+	}
+}
 
 
 
