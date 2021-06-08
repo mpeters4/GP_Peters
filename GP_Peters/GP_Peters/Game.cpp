@@ -239,6 +239,8 @@ void Game::drawMap() {
 	}
 }
 
+
+
 bool Game::checkCollision(Object a, Object b) {
 	//The sides of the rectangles
 	int leftA, leftB;
@@ -281,6 +283,8 @@ bool Game::checkCollision(Object a, Object b) {
 	//If none of the sides from A are outside B
 	return true;
 }
+
+void Game::calcJump();
 
 
 
