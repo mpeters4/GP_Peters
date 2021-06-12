@@ -24,7 +24,6 @@ public:
 	void calcAir();
 	void calcJump();
 	bool checkCollision(Object a, Object b);
-	bool onFloor(Object a, Object b);
 	bool running() { return isRunning; };
 	
 

@@ -18,6 +18,8 @@ int gravity = 2;
 bool fall = true;
 bool jump = false;
 bool colision = false;
+//movement
+
 //JUMP motion
 float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
@@ -288,21 +290,6 @@ bool Game::checkCollision(Object a, Object b) {
 	cout << "col" << endl;
 	return 1;
 	
-}
-
-bool Game::onFloor(Object a, Object b) {
-	int topA, topB;
-	int bottomA, bottomB;
-	topA = a.getDest().y;
-	bottomA = a.getDest().y + a.getDest().h;
-	topB = b.getDest().y;
-	bottomB = b.getDest().y + b.getDest().h;
-	if (bottomA >= topB) {
-		return true;
-		cout << "on floor \n";
-	}
-	return false;
-
 }
 
 void Game::calcAir() {
