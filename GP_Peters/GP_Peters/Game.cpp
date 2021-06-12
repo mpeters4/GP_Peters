@@ -19,7 +19,7 @@ bool fall = true;
 bool jump = false;
 bool colision = false;
 //movement
-
+int mLeft, mRight, mUp, mDown = 0;
 //JUMP motion
 float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
