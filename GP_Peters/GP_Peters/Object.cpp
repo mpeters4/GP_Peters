@@ -26,7 +26,7 @@ void Object::setSolid(bool solid) {
 }
 
 //
-void Object::move(int dir, int velocity) {
+void Object::move(int dir, float velocity) {
 	//RIGHT
 	if (dir == 1) {
 		dest.x += velocity;

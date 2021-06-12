@@ -20,6 +20,6 @@ public:
 	void setSrc(int x, int y, int w, int h);
 	void setImg(const char* filename, SDL_Renderer* renderer);
 	void setSolid(bool solid);
-	void move(int dir, int velocity);
+	void move(int dir, float velocity);
 
 };
