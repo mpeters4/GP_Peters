@@ -17,7 +17,8 @@ int velocity;
 int gravity = 2;
 bool fall = true;
 bool jump = false;
-//TEST JUMP motion
+bool colision = false;
+//JUMP motion
 float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
 float dt;
@@ -69,6 +70,14 @@ void Game::eventHandler() {
 			m = -1;
 			
 		}
+		if (e.key.keysym.sym == SDLK_UP) {
+			m = -2;
+		}
+		
+		if (e.key.keysym.sym == SDLK_DOWN) {
+			m = 2;
+		}
+
 		if (e.key.keysym.sym == SDLK_RIGHT) {
 			std::cout << "RIGHT down" << "\n";
 			//player.move(1, 1);
@@ -157,19 +166,30 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	calcJump();
+	if (jump) {
+		calcJump();
+
+	}
+	calcAir();
 	for (int i = 0; i < map.size(); i++) {
-		if (checkCollision(player, map[i])) {
-			//cout << "Collision with block " << i << endl;
-			fall = false;
+		if (checkCollision(player, map[i] ) == 1) {
+			
+			//colision = true;
 		}
+
 	}
 	if (m != 0) {
-			player.move(m, 1);
-			m = 0;
+		player.move(m, 1);
+		//player.move(-2, gravity);
+		if (colision) {
+			player.move(-m, 1);
+			//player.move(2, gravity);
+			
+		}
+		m = 0;
 	}
 	if (fall) {
-		player.move(-2, gravity);
+		//player.move(-2, gravity);
 	}
 }
 
@@ -245,48 +265,71 @@ bool Game::checkCollision(Object a, Object b) {
 	//If any of the sides from A are outside of B
 	if (bottomA <= topB)
 	{
-		return false;
+		return 0;
+		cout << "on floor" << endl;
 	}
 
 	if (topA >= bottomB)
 	{
-		return false;
+		return 0;
 	}
 
 	if (rightA <= leftB)
 	{
-		return false;
+		return 0;
 	}
 
 	if (leftA >= rightB)
 	{
-		return false;
+		return 0;
 	}
 	
 	//If none of the sides from A are outside B
-	return true;
+	cout << "col" << endl;
+	return 1;
+	
+}
+
+bool Game::onFloor(Object a, Object b) {
+	int topA, topB;
+	int bottomA, bottomB;
+	topA = a.getDest().y;
+	bottomA = a.getDest().y + a.getDest().h;
+	topB = b.getDest().y;
+	bottomB = b.getDest().y + b.getDest().h;
+	if (bottomA >= topB) {
+		return true;
+		cout << "on floor \n";
+	}
+	return false;
+
+}
+
+void Game::calcAir() {
+	if (jump) {
+		calcJump();
+	}
+	else {
+		
+	}
 }
 
 void Game::calcJump() {
-	if (jump) {
-		cout << "JUMP: " << jump << "JUMPHEIGHT: " << jumpHeight << "PY " << player.getDest().y << endl;
-		flPrevTime = flCurTime;
-		flCurTime = SDL_GetTicks();
-		dt = (flCurTime - flPrevTime) * 0.1;
-		cout << "dt " << dt << endl;
-		if (dt >= 1.5) {
-			dt = 1.5;
-		}
+	cout << "JUMP: " << jump << "JUMPHEIGHT: " << jumpHeight << "PY " << player.getDest().y << endl;
+	flPrevTime = flCurTime;
+	flCurTime = SDL_GetTicks();
+	dt = (flCurTime - flPrevTime) * 0.1;
+	cout << "dt " << dt << endl;
+	if (dt >= 1.5) {
+		dt = 1.5;
+	}
 
-		if (player.getDest().y <= jumpHeight) {
-			jump = false;
-			jumpCharge = false;
-		}
-		player.move(2, dt);
+	if (player.getDest().y <= jumpHeight) {
+		jump = false;
+		jumpCharge = false;
 	}
-	else {
-		fall = true;
-	}
+	player.move(2, dt);
+
 }
 
 
