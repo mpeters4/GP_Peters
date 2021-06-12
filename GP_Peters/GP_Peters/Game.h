@@ -23,6 +23,7 @@ public:
 	void drawMap();
 	void calcAir();
 	void calcJump();
+	void calcMovement();
 	bool checkCollision(Object a, Object b);
 	bool running() { return isRunning; };
 	

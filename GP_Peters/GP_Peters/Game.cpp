@@ -14,12 +14,12 @@ bool jumpCharge = false;
 Uint32 jumpTimer = 0;
 const Uint8* keystate = SDL_GetKeyboardState(NULL);
 int velocity; 
-int gravity = 2;
+int gravity = 1;
 bool fall = true;
 bool jump = false;
 bool colision = false;
 //movement
-int mLeft, mRight, mUp, mDown = 0;
+float mLeft, mRight, mUp, mDown = 0;
 //JUMP motion
 float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
@@ -69,21 +69,21 @@ void Game::eventHandler() {
 		if (e.key.keysym.sym == SDLK_LEFT) {
 			std::cout << "LEFT down" << "\n";	
 			//player.move(-1, 1);
-			m = -1;
+			mLeft = 1;
 			
 		}
 		if (e.key.keysym.sym == SDLK_UP) {
-			m = -2;
+			mUp = 1;
 		}
 		
 		if (e.key.keysym.sym == SDLK_DOWN) {
-			m = 2;
+			mDown = 1;
 		}
 
 		if (e.key.keysym.sym == SDLK_RIGHT) {
 			std::cout << "RIGHT down" << "\n";
 			//player.move(1, 1);
-			m = 1;
+			mRight = 1;
 		}
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_LEFT]) {
 			printf("LEFT and SPACE Keys Pressed.\n");
@@ -168,6 +168,7 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
+	
 	if (jump) {
 		calcJump();
 
@@ -175,11 +176,12 @@ void Game::update() {
 	calcAir();
 	for (int i = 0; i < map.size(); i++) {
 		if (checkCollision(player, map[i] ) == 1) {
-			
-			//colision = true;
+			colision = true;
 		}
-
 	}
+	calcMovement();
+	colision = false;
+	/*
 	if (m != 0) {
 		player.move(m, 1);
 		//player.move(-2, gravity);
@@ -192,6 +194,63 @@ void Game::update() {
 	}
 	if (fall) {
 		//player.move(-2, gravity);
+	}
+	*/
+}
+
+void Game::calcMovement() {
+	cout << "Calc Movement" << endl << "Left " << mLeft << endl << "Right " << mRight << endl << "Up " << mUp << endl << "Down" << mDown << endl;
+	if (mLeft != 0) {
+		player.move(-1, mLeft);
+		for (int i = 0; i < map.size(); i++) {
+			if (checkCollision(player, map[i]) == 1) {
+				colision = true;
+			}
+		}
+		if (colision) {
+			player.move(1, mLeft);
+		}
+		
+		mLeft = 0;
+		
+	}
+	if (mRight != 0) {
+		player.move(1, mRight);
+		for (int i = 0; i < map.size(); i++) {
+			if (checkCollision(player, map[i]) == 1) {
+				colision = true;
+			}
+		}
+		if (colision) {
+			player.move(-1, mRight);
+		}
+		mRight = 0;
+		
+	}
+	if (mUp != 0) {
+			player.move(2, mUp);
+			for (int i = 0; i < map.size(); i++) {
+				if (checkCollision(player, map[i]) == 1) {
+					colision = true;
+				}
+			}
+		if (colision) {
+			player.move(-2, mUp);
+		}
+		mUp = 0;
+	}
+	if (mDown != 0) {
+		player.move(-2, mDown);
+		for (int i = 0; i < map.size(); i++) {
+			if (checkCollision(player, map[i]) == 1) {
+				colision = true;
+			}
+		}
+		if (colision) {
+			player.move(2, mDown);
+		}
+		mDown = 0;
+		
 	}
 }
 
@@ -287,7 +346,7 @@ bool Game::checkCollision(Object a, Object b) {
 	}
 	
 	//If none of the sides from A are outside B
-	cout << "col" << endl;
+	//cout << "col" << endl;
 	return 1;
 	
 }
@@ -297,7 +356,7 @@ void Game::calcAir() {
 		calcJump();
 	}
 	else {
-		
+		mDown = gravity;
 	}
 }
 
@@ -315,7 +374,7 @@ void Game::calcJump() {
 		jump = false;
 		jumpCharge = false;
 	}
-	player.move(2, dt);
+	mUp = dt;
 
 }
 
