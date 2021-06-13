@@ -9,7 +9,6 @@ using namespace std;
 
 
 Object player;
-int m = 0;
 bool jumpCharge = false;
 Uint32 jumpTimer = 0;
 const Uint8* keystate = SDL_GetKeyboardState(NULL);
@@ -20,6 +19,7 @@ bool jump = false;
 bool colision = false;
 //movement
 float mLeft, mRight, mUp, mDown = 0;
+float jumpDir = 0;
 //JUMP motion
 float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
@@ -70,19 +70,15 @@ void Game::eventHandler() {
 			std::cout << "LEFT down" << "\n";	
 			//player.move(-1, 1);
 			mLeft = 1;
-			
 		}
 		if (e.key.keysym.sym == SDLK_UP) {
 			mUp = 1;
 		}
-		
 		if (e.key.keysym.sym == SDLK_DOWN) {
 			mDown = 1;
 		}
-
 		if (e.key.keysym.sym == SDLK_RIGHT) {
 			std::cout << "RIGHT down" << "\n";
-			//player.move(1, 1);
 			mRight = 1;
 		}
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_LEFT]) {
@@ -92,14 +88,16 @@ void Game::eventHandler() {
 				jumpCharge = true;
 			}
 			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
-				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump!" << endl;
-
+				std::cout << "SPACE AND LEFT hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump!" << endl;
 				jumpCharge = false;
-				player.move(0, 32);
-				player.move(-1, 32);
-
+				if (!jump) {
+					//player.move(2, TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
+					jumpHeight = player.getDest().y - (TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
+					cout << jumpHeight << endl;
+					mLeft = 1;
+					jump = true;
+				}
 			}
-			//player.move(-1, 32);
 		}
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_RIGHT]) {
 			printf("RIGHT and SPACE Keys Pressed.\n");
@@ -107,9 +105,7 @@ void Game::eventHandler() {
 		}
 
 		if (e.key.keysym.sym == SDLK_SPACE) {
-			
 			std::cout << "SPACE down" << "\n";
-
 			if (!jumpCharge) {
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
@@ -117,18 +113,12 @@ void Game::eventHandler() {
 			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
 				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump! " <<  endl;
 				if (!jump) {
-					
-
 					//player.move(2, TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
 					jumpHeight = player.getDest().y- (TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001) ;
 					cout << jumpHeight <<endl;
 					jump = true;
-
 				}
-				
-				
 			}
-
 		}
 		break;
 	case SDL_KEYUP:
@@ -143,12 +133,9 @@ void Game::eventHandler() {
 			if (jumpCharge) {
 				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "Jumpheight: " << TILE_SIZE*(SDL_GetTicks() - jumpTimer) * 0.001 << endl;
 				if (!jump) {
-
 					//player.move(2, TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001);
 					jumpHeight = player.getDest().y - (TILE_SIZE * (SDL_GetTicks() - jumpTimer) * 0.001) ;
-
 					jump = true;
-
 				}
 			} 
 		}
@@ -181,21 +168,6 @@ void Game::update() {
 	}
 	calcMovement();
 	colision = false;
-	/*
-	if (m != 0) {
-		player.move(m, 1);
-		//player.move(-2, gravity);
-		if (colision) {
-			player.move(-m, 1);
-			//player.move(2, gravity);
-			
-		}
-		m = 0;
-	}
-	if (fall) {
-		//player.move(-2, gravity);
-	}
-	*/
 }
 
 void Game::calcMovement() {
@@ -210,8 +182,10 @@ void Game::calcMovement() {
 		if (colision) {
 			player.move(1, mLeft);
 		}
+		if (!jump) {
+			//mLeft = 0;
+		}
 		
-		mLeft = 0;
 		
 	}
 	if (mRight != 0) {
@@ -352,6 +326,11 @@ bool Game::checkCollision(Object a, Object b) {
 }
 
 void Game::calcAir() {
+	if (jumpHeight != 0) {
+
+		mLeft = ((jumpHeight - player.getDest().y) / jumpHeight) * -1;
+	}
+	
 	if (jump) {
 		calcJump();
 	}
