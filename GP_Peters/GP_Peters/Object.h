@@ -5,6 +5,7 @@
 
 class Object {
 private:
+	float velocityX, velocityY, posX, posY;
 	SDL_Rect dest, src;
 	//SDL_Rect src;
 	SDL_Texture* tex;
@@ -21,5 +22,7 @@ public:
 	void setImg(const char* filename, SDL_Renderer* renderer);
 	void setSolid(bool solid);
 	void move(int dir, float velocity);
-
+	void setPos(int mX, int mY);
+	void newMove(float mX, float mY);
+	void setVelocity(float velX, float velY);
 };

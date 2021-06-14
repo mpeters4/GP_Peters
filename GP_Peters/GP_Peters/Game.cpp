@@ -7,17 +7,19 @@ using namespace std;
 
 #define TILE_SIZE 32
 
-
+Player p;
 Object player;
 bool jumpCharge = false;
 Uint32 jumpTimer = 0;
 const Uint8* keystate = SDL_GetKeyboardState(NULL);
-int velocity; 
+int  velocity;
 int gravity = 1;
 bool fall = true;
 bool jump = false;
 bool colision = false;
 //movement
+int mX, mY;
+float velX, velY;
 float mLeft, mRight, mUp, mDown = 0;
 float jumpDir = 0;
 //JUMP motion
@@ -47,15 +49,13 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	else {
 		isRunning = false;
 	}
-	
-	player.setDest(800, 672, 52, 64);
-	player.setSrc(12, 0, 52, 64);
-	player.setImg("model/player.png", renderer);
 
-	loadMap("res/1.map");
 	
+	p.player.setDest(800, 672, 52, 64);
+	p.player.setSrc(12, 0, 52, 64);
+	p.player.setImg("model/player.png", renderer);
+	initLevel();
 	
-
 }
 
 void Game::eventHandler() {
@@ -155,7 +155,7 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	
+
 	if (jump) {
 		calcJump();
 
@@ -182,11 +182,7 @@ void Game::calcMovement() {
 		if (colision) {
 			player.move(1, mLeft);
 		}
-		if (!jump) {
-			//mLeft = 0;
-		}
-		
-		
+		mLeft = 0;
 	}
 	if (mRight != 0) {
 		player.move(1, mRight);
@@ -237,6 +233,10 @@ void Game::render() {
 	
 }
 
+void Game::initLevel() {
+	velocity = 1;
+	loadMap("res/1.map");
+}
 
 void Game::loadMap(const char* filename) {
 	int current, x, y, w, h;
@@ -328,9 +328,8 @@ bool Game::checkCollision(Object a, Object b) {
 void Game::calcAir() {
 	if (jumpHeight != 0) {
 
-		mLeft = ((jumpHeight - player.getDest().y) / jumpHeight) * -1;
+		//mLeft = ((jumpHeight - player.getDest().y) / jumpHeight) * -1;
 	}
-	
 	if (jump) {
 		calcJump();
 	}
@@ -343,21 +342,18 @@ void Game::calcJump() {
 	cout << "JUMP: " << jump << "JUMPHEIGHT: " << jumpHeight << "PY " << player.getDest().y << endl;
 	flPrevTime = flCurTime;
 	flCurTime = SDL_GetTicks();
-	dt = (flCurTime - flPrevTime) * 0.1;
+	dt = (flCurTime - flPrevTime) * 0.01;
 	cout << "dt " << dt << endl;
-	if (dt >= 1.5) {
-		dt = 1.5;
+	if (dt >= 0.15) {
+		dt = 0.15;
 	}
-
+	//player.newMove(1, 1, velX * dt, velY * dt);
 	if (player.getDest().y <= jumpHeight) {
 		jump = false;
 		jumpCharge = false;
 	}
 	mUp = dt;
-
 }
-
-
 
 void Game::clean() {
 	SDL_DestroyWindow(window);

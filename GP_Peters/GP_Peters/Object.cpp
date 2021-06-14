@@ -43,6 +43,19 @@ void Object::move(int dir, float velocity) {
 	if (dir == -2) {
 		dest.y += velocity;
 	}
+}
 
-
+void Object::setPos(int mX, int mY){
+	dest.x = posX;
+	dest.y = posY;
+}
+// X -left + right Y -up +down
+void Object::newMove(float mX, float mY) {
+	posX += velocityX * mX;
+	posY += velocityY * mY;
+	setPos(posX, posY);
+}
+void Object::setVelocity(float velX, float velY) {
+	velocityX = velX;
+	velocityY = velY;
 }

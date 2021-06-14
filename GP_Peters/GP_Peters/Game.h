@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "Object.h"
+#include "Player.h"
 
 #include <stdio.h>
 #include <vector>
@@ -19,6 +20,7 @@ public:
 	void render();
 	void clean();
 	void draw(Object o);
+	void initLevel();
 	void loadMap(const char* filename);
 	void drawMap();
 	void calcAir();
