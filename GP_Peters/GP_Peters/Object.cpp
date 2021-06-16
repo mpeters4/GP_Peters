@@ -5,6 +5,9 @@ void Object::setDest(int x, int y, int w, int h) {
 	dest.y = y;
 	dest.w = w;
 	dest.h = h;
+	posX = x;
+	posY = y;
+	
 
 }
 void Object::setSrc(int x, int y, int w, int h) {
@@ -26,23 +29,14 @@ void Object::setSolid(bool solid) {
 }
 
 //
-void Object::move(int dir, float velocity) {
-	//RIGHT
-	if (dir == 1) {
-		dest.x += velocity;
-	}
-	//LEFT
-	if (dir == -1) {
-		dest.x -= velocity;
-	}
-	//UP
-	if (dir == 2) {
-		dest.y -= velocity;
-	}
-	//DOWN
-	if (dir == -2) {
-		dest.y += velocity;
-	}
+void Object::moveX(float mX, float velX) {
+	posX += velX * mX;
+	dest.x = posX;
+}
+
+void Object::moveY(float mY, float velY) {
+	posY += velY * mY;
+	dest.y = posY;
 }
 
 void Object::setPos(int mX, int mY){
@@ -50,12 +44,10 @@ void Object::setPos(int mX, int mY){
 	dest.y = posY;
 }
 // X -left + right Y -up +down
-void Object::newMove(float mX, float mY) {
-	posX += velocityX * mX;
-	posY += velocityY * mY;
+void Object::newMove(float mX, float mY, float velX, float velY) {
+	//std::cout << "From " << posX << "Y" << posY << std::endl;
+	posX += velX * mX;
+	posY += velY * mY;
+	//std::cout << "move to " << posX << "Y" << posY << std::endl;
 	setPos(posX, posY);
-}
-void Object::setVelocity(float velX, float velY) {
-	velocityX = velX;
-	velocityY = velY;
 }
