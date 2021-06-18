@@ -150,7 +150,7 @@ Mit der Leertaste wird der Spielcharakter zum Springen gebracht. Dabei ist relev
 <br/>Der Sprung und das Abprallen funktioniert noch nicht einwandfrei. Ich halte mich mit genauen Beschreibungen der Funktionsweise vorerst zurück, da diese sich noch ändern werden.
 ##### Fehler 
 Der einzige wirklich ausschlaggebende Fehler ist das Festhängen an der Decke bei Kollision. Sobald der Spieler mit der Oberseite kollidiert, bleibt dieser daran hängen und fällt nicht. Das hat vermutlich damit zu tun, dass die errechnete Höhe noch nicht erreicht ist und somit weiter gesprungen wird, obwohl eine Richtungsänderung vorliegt. Dies bedeutet, dass ich an einem neuen Konzept für die Sprunghöhe arbeiten muss. Meine Idee wäre es, eine Sprungkraft zu definieren, die zeitbedingt abfällt, wenn man sich in der Luft befindet. 
-<br/>Ein weiterer Punkt ist die Flugkurve. Diese läuft noch sehr linear und der Spieler spring in einer Dreiecksform. 
+<br/>Ein weiterer Punkt ist die Flugkurve. Diese läuft noch sehr linear und der Spieler spring in einer Dreiecksform. <br/>
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung_dreieck.png"/>
 Dies ist natürlich keine realistische Sprungkurve. Diese soll zukünftig wie im folgenden Bild aussehen. Dazu muss die Positionsberechnung pro Frame, als schwarze Balken dargestellt, anders erfolgen. Dies lässt sich allerdings auch mithilfe einer Zeitkomponente und SDL_GetTicks() lösen und sollte kein Problem darstellen. Ich möchte vorerst einen problemfreien Sprung erzeugen, bevor ich mich weiter mit der Sprungkurve befasse.
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung.png"/>
