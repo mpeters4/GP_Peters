@@ -153,7 +153,7 @@ Der einzige wirklich ausschlaggebende Fehler ist das Festhängen an der Decke be
 <br/>Ein weiterer Punkt ist die Flugkurve. Diese läuft noch sehr linear und der Spieler spring in einer Dreiecksform. <br/>
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung_dreieck.png"/>
 Dies ist natürlich keine realistische Sprungkurve. Diese soll zukünftig wie im folgenden Bild aussehen. Dazu muss die Positionsberechnung pro Frame, als schwarze Balken dargestellt, anders erfolgen. Dies lässt sich allerdings auch mithilfe einer Zeitkomponente und SDL_GetTicks() lösen und sollte kein Problem darstellen. Ich möchte vorerst einen problemfreien Sprung erzeugen, bevor ich mich weiter mit der Sprungkurve befasse.
-<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung.png"/>
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung.png"/><br/>
 #### Zukunftsausblick
 Sobald der Bewegungsteil erfolgt ist, werden Animationen und Texturen für das Level erstellt. Nachdem dies eingebunden ist, fehlt noch das Übergehen in eine neue Karte, um alle essenziellen Spielfunktionen einzubinden.
 
