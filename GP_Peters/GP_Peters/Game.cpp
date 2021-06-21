@@ -135,21 +135,6 @@ void Game::eventHandler() {
 			}
 		}
 
-		/*if (e.key.keysym.sym == SDLK_SPACE && !air) {
-			std::cout << "SPACE down "  ;
-
-			if (!jumpCharge) {
-				jumpTimer = SDL_GetTicks();
-				jumpCharge = true;
-			}
-			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
-				std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump! " <<  endl;
-				velDY = - (MAX_JUMPTIME * 0.001) ;
-				jumpCharge = false;
-				
-			}
-		}*/
-
 		if (e.key.keysym.sym == SDLK_SPACE && !air) {
 			std::cout << "SPACE down" << "\n";
 			if (!jumpCharge) {
@@ -221,8 +206,6 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	cout << "MX " << mX << "MY " << mY << endl;
-	cout << "JUMP " << jump << endl;
 	calcMovement();
 	calcAir();
 	colision = false;
@@ -341,7 +324,6 @@ void Game::calcMovement() {
 		}
 		else {
 			failDTCount += 1;
-			
 		}cout << "FAIL DT " << failDTCount << endl;
 		velDY = velDY + gravity * dt;
 		cout << "VELDX " << velDX << " VELDY " << velDY << endl;
@@ -351,8 +333,10 @@ void Game::calcMovement() {
 	for (int i = 0; i < map.size(); i++) {
 		if (checkCollision(player, map[i]) == 1) {
 			player.move(-velDX, 0);
+			if (air) {
+				velDX = velDX * -1;
+			}
 			
-			velDX = velDX * -1;
 		}
 	}
 	player.move(0, velDY);
