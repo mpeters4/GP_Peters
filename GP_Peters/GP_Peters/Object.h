@@ -25,5 +25,6 @@ public:
 	void moveX(float mX, float velocity);
 	void moveY(float mY, float velY);
 	void setPos(int mX, int mY);
+	void move(float velX, float velY);
 	void newMove(float mX, float mY, float velX, float velY);
 };

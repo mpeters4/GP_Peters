@@ -43,11 +43,18 @@ void Object::setPos(int mX, int mY){
 	dest.x = posX;
 	dest.y = posY;
 }
+
+void Object::move(float velX, float velY) {
+	posX += velX;
+	posY += velY;
+	setPos(posX, posY);
+}
+
 // X -left + right Y -up +down
 void Object::newMove(float mX, float mY, float velX, float velY) {
 	//std::cout << "From " << posX << "Y" << posY << std::endl;
-	posX += velX * mX;
-	posY += velY * mY;
+	posX += velX; //* mX;
+	posY += velY;//* mY;
 	//std::cout << "move to " << posX << "Y" << posY << std::endl;
 	setPos(posX, posY);
 }
