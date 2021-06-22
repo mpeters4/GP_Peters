@@ -157,4 +157,116 @@ Dies ist natürlich keine realistische Sprungkurve. Diese soll zukünftig wie im
 #### Zukunftsausblick
 Sobald der Bewegungsteil erfolgt ist, werden Animationen und Texturen für das Level erstellt. Nachdem dies eingebunden ist, fehlt noch das Übergehen in eine neue Karte, um alle essenziellen Spielfunktionen einzubinden.
 
+### 16.06.2021 Sprünge und Kollision
+Der wichtigste Teil des Spiels ist die Steuerung. Wenn diese nicht absolut fehlerfrei funktioniert, geht das gesamte Spielkonzept nicht mehr auf. Die letzten 14 Tage habe ich damit verbracht, diese so zu gestalten, wie ich sie gerne hätte. Leider nicht ganz erfolgreich. Deshalb ist dieser Eintrag auch eher ein Update zum aktuellen Stand als eine finale Beschreibung der Funktionalität.
+Folgende Fortschritte wurden in der letzten Woche erzielt:
+-Bewegen von Objekten
+-Sprung Funktion (teilweise)
+-Kollisionsberechnung
+
+#### move Funktion für die Bewegung von Objekten
+Um vor allem den Spieler zu bewegen, besitzt die Object Klasse jetzt die Move Funktion. Dieser werden die Bewegungsrichtung und die dazugehörige Geschwindigkeit übergeben.
+Geschwindigkeit und Richtung werden nun multipliziert und und der Position auf X- bzw. Y-Achse addiert. Anschließend wir die Figur auf die entsprechende Position gesetzt.
+Die Variablen sind vom Datentyp float gewählt, da ich für die Sprungkurve teilweise Dezimalzahlen erhalte. Die Position des Objectes wird von SDL allerdings als Integer gespeichert.
+Wenn ich diese Dezimalzahlen nicht exta in den Variablen posX und posY speichere, wird die Position nicht exakt gespeichert und es kommt zu Fehlern aufgrund der Ungenauigkeit.
+
+```cpp
+void Object::move(float mX, float mY, float velX, float velY) {
+
+	posX += velX * mX;
+	posY += velY * mY;
+	setPos(posX, posY);
+}
+```
+
+#### Kollisionsberechnung
+Sobald der Spieler ein Objekt berührt, soll dieser selbstverständlich nicht durchlaufen können, sondern davor stehen bleiben. Dafür muss erfasst werden, ob der Spieler mit einem Objekt kollidiert. Sobald eine Bewegung stattfindet, wird die Position des Spielers mit allen erstellten Objekten verglichen. Wird eine Kollision erfasst, wird die Bewegung noch zurückgesetzt, bevor sie visuell dargestellt wird.
+Die Kollision wird berechnet, indem die Koordinaten der Ecken des Rechtecks miteinander verglichen werden. Dazu werden natürlich nur die Seiten verglichen, die sich überhaupt berühren können. 
+<br/>Um auch Objekte in den Hintergrund zu setzen, habe ich einfach ein Boolean "solid" gesetzt, der aussagt, ob das Objekt in der Kollisionsberechnung berücksichtigt wird oder nicht. 
+```cpp
+player.move(mX, mY, velX, velY);
+for (int i = 0; i < map.size(); i++) {
+	if (map[i].getSolid()) {
+	if (checkCollision(player, map[i]) == 1&& map[i].getSolid()) {
+			colision = true;
+		}
+	}
+}
+	if (colision) {
+	player.move(-mX, -mY, velX, velY);
+	colision = false;
+}
+```
+Wie genau nach einer Kollision gehandelt wird, hängt von der Bewegungsrichtung ab. Außerdem ist es wichtig, ob der Spieler sich in der Luft oder auf dem Boden befindet.
+Ist der Spieler in der Luft und kollidiert beispielsweise mit einer Wand prallt dieser ab und die Flugrichtung ändert sich. Berührt man den Boden, bleibt die Figur stehen.
+
+#### Sprünge
+Mit der Leertaste wird der Spielcharakter zum Springen gebracht. Dabei ist relevant, wie lange die Taste gedrückt wird. Je länger diese Taste gedrückt gehalten wird, desto hört ist die Sprungkraft. Wenn die Leertaste über drei Sekunden lang gedrückt gehalten wird, ist die maximale Sprunghöhe erreicht und die Figur springt los. Dies wird mithilfe von SDL_GetTicks() gelöst. Damit bekomme ich einen Zeitstempel im Millisekundenbereich. In Kombination mit einer Hilfvariable, die den Startzeitpunkt festhält, kann die Dauer des Tastendrucks ermittelt werden. Sobald der Boden verlassen wird, ist es nicht mehr möglich, die Figur noch zu bewegen. 
+<br/>Der Sprung und das Abprallen funktioniert noch nicht einwandfrei. Ich halte mich mit genauen Beschreibungen der Funktionsweise vorerst zurück, da diese sich noch ändern werden.
+##### Fehler (behoben)
+Der einzige wirklich ausschlaggebende Fehler ist das Festhängen an der Decke bei Kollision. Sobald der Spieler mit der Oberseite kollidiert, bleibt dieser daran hängen und fällt nicht. Das hat vermutlich damit zu tun, dass die errechnete Höhe noch nicht erreicht ist und somit weiter gesprungen wird, obwohl eine Richtungsänderung vorliegt. Dies bedeutet, dass ich an einem neuen Konzept für die Sprunghöhe arbeiten muss. Meine Idee wäre es, eine Sprungkraft zu definieren, die zeitbedingt abfällt, wenn man sich in der Luft befindet. 
+<br/>Ein weiterer Punkt ist die Flugkurve. Diese läuft noch sehr linear und der Spieler spring in einer Dreiecksform. 
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung_dreieck.png"/>
+Dies ist natürlich keine realistische Sprungkurve. Diese soll zukünftig wie im folgenden Bild aussehen. Dazu muss die Positionsberechnung pro Frame, als schwarze Balken dargestellt, anders erfolgen. Dies lässt sich allerdings auch mithilfe einer Zeitkomponente und SDL_GetTicks() lösen und sollte kein Problem darstellen. Ich möchte vorerst einen problemfreien Sprung erzeugen, bevor ich mich weiter mit der Sprungkurve befasse.
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung.png"/>
+#### Zukunftsausblick
+Sobald der Bewegungsteil erfolgt ist, werden Animationen und Texturen für das Level erstellt. Nachdem dies eingebunden ist, fehlt noch das Übergehen in eine neue Karte, um alle essenziellen Spielfunktionen einzubinden.
+
+### 22.06.2021 Sprünge und Kollision final und Konstante Framerate
+Die gesamte Bewegungssteuerung ist abgeschlossen und meines Wissens nach fehlerfrei. Dazu habe ich die gesamte Mechanik der Bewegung noch einmal überarbeitet. 
+
+#### Überarbeitete move Funktion 
+Das Grundkonzept der move Funktion ist identisch geblieben. Allerdings gebe ich nur noch jeweils einen Wert für X und Y Achse an. Die Bewegung selbst wird jetzt in der calcMovement Funktion der Game Klasse berechnet und die move Funktion führt nur noch aus. Die Geschwindigkeit des Spielers wird mit velX und velY für beide Achsen bestimmt. 
+
+#### Bewegung
+Die Bewegung wird durch Tastatureingaben im EventHandler gesetzt. Die Variablen velDX und velDY bestimmen, wohin sich der Spieler im nächsten Bild bewegt. Bei der Bewegung nach links und rechts wird sich einfach mit der Geschwindigkeit von velX bewegt. Bei einem Sprung wird die Sprungkraft mit der Dauer des Tastendrucks bestimmt. Diese Berechnung hat sich nicht verändert. Sobald der Sprung 2 Sekunden lang gehalten wird, springt die Figur mit voller Kraft ab:
+```cpp
+//Beispiel zum Sprung mit maximaler Höhe
+if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
+	jumpCharge = false;
+	velDY = -velY * (MAX_JUMPTIME * 0.0015);
+	velDX = -velX;	
+	}
+```
+Die Bewegung selbst wird von den Funktionen calcMovement und calcAir ausgeführt.
+
+#### Bewegungssteuerung mit calcMovement und calcAir
+Eine Bewegung des Spielcharakters soll nur am Boden stattfinden. Während sich dieser in der Luft befindet, darf kein Einfluss mehr auf die Bewegung genommen werden können. Mithilfe von calcAir wird geprüft, ob der Spieler sich in der Luft oder auf dem Boden befindet. 
+
+##### calcAir
+Um zu bestimmen, ob der Spieler sich auf dem Boden befindet, wird mit move() eine Bewegung um einen Pixel nach unten ausgeführt und geprüft, ob eine Kollision entsteht. Bei Kollision befindet sich der Spieler logischerweise auf einem Objekt. Wenn nicht, dann ist dieser in der Luft. Dies wird einfach durch das Boolean "air" gesetzt. Wenn der Spieler aus der Luft das erste Mal auf ein Objekt fällt, wird die Bewegung aus der Luft (der Fall) auf 0 gesetzt und die Figur bleibt stehen.
+
+##### calcMovement
+Die calcMovement Funktion versucht die Bewegung für den Frame auszuführen. Dabei werden die Bewegungen in X und Y Achse nacheinander ausgeführt, da die Kollision verschieden behandelt wird. Die Bewegung auf der X-Achse wird ausgeführt und bei Kollision wieder zurückgesetzt und somit nicht ausgeführt. Bei Kollision in der Luft wird die Richtung auf der X-Achse zusätzlich geändert, damit die Figur von der Wand abprallt.
+```cpp
+player.move(velDX, 0);
+	for (int i = 0; i < map.size(); i++) {
+		if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
+			player.move(-velDX, 0);
+			if (air) {
+				velDX = velDX * -1;
+			}
+		}
+	}
+``` 
+Die Bewegung auf der y-Achse funktioniert ähnlich. Zuerst wird die Figur bewegt und dann auf Kollision geprüft. Bei Kollision wieder zurückgesetzt. Bei Bewegung nach oben prallt die Figur ebenfalls von dem Objekt ab. Bewegt die Figur sich nach unten und kollidiert, bleibt diese direkt stehen. 
+In der Luft wird velDY zusätzlich mit einer Schwerkraftsvariable verrechnet. Diese zieht die Figur nach und nach wieder nach unten. Somit wird auch die Sprungkurve realisiert. Die Berechnung rechnet für jedes Bild einen Faktor aus, multipliziert diesen mit der gravity Variable und addiert diesen zu velDY. Dadurch verringert sich die Bewegung nach oben immer weiter, bis sie schließlich die Richtung ändert und ein Fallen ermöglicht. Für die Berechnung wird eine konstante Framerate benötigt, da die Sprünge sonst inkonstant werden. 
+```cpp
+if (air) {
+		//Berechnung des Zeitfaktors dt
+		flPrevTime = flCurTime;
+		flCurTime = SDL_GetTicks();
+		dt = (flCurTime - flPrevTime) * 0.001;
+		if (dt >= 0.007) {
+			dt = 0.007;
+		}
+		velDY = velDY + gravity * dt;
+	}
+``` 
+Fällt die Figur auf ein Objekt, kann es vorkommen, dass die Bewegung nach unten höher ist als der Abstand zum Boden. Somit wird diese Bewegung zurückgesetzt und die Figur bleibt in der Luft stehen. Um dies zu verhindern, wird die Figur in diesem Fall die restliche Route bewegt und landet immer auf dem Boden.
+
+#### Konstante Framerate
+Um eine konstante Sprungkurve zu ermöglichen, müssen auch die Frames konstant sein. Zusätzlich dazu vermeidet eine Limitierung der Framerate unnötigen Ressourcenverbrauch.
+Diese Limitierung ist ziemlich simpel. Es wird zuerst errechnet, wie viel Verzögerung zwischen den Bildern benötigt wird. Wird dieser unterschritten, wird mithilfe von SDL_Delay die nächste Ausführung des Gameloops verzögert.
+
 
