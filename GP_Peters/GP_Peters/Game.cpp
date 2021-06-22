@@ -149,7 +149,6 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
-	cout << "VEL DX " << velDX << "VEL DY " << velDY << endl;
 	calcMovement();
 	calcAir();
 }
