@@ -148,7 +148,7 @@ Ist der Spieler in der Luft und kollidiert beispielsweise mit einer Wand prallt 
 #### Sprünge
 Mit der Leertaste wird der Spielcharakter zum Springen gebracht. Dabei ist relevant, wie lange die Taste gedrückt wird. Je länger diese Taste gedrückt gehalten wird, desto hört ist die Sprungkraft. Wenn die Leertaste über drei Sekunden lang gedrückt gehalten wird, ist die maximale Sprunghöhe erreicht und die Figur springt los. Dies wird mithilfe von SDL_GetTicks() gelöst. Damit bekomme ich einen Zeitstempel im Millisekundenbereich. In Kombination mit einer Hilfvariable, die den Startzeitpunkt festhält, kann die Dauer des Tastendrucks ermittelt werden. Sobald der Boden verlassen wird, ist es nicht mehr möglich, die Figur noch zu bewegen. 
 <br/>Der Sprung und das Abprallen funktioniert noch nicht einwandfrei. Ich halte mich mit genauen Beschreibungen der Funktionsweise vorerst zurück, da diese sich noch ändern werden.
-##### Fehler (behoben)
+#### Fehler (behoben)
 Der einzige wirklich ausschlaggebende Fehler ist das Festhängen an der Decke bei Kollision. Sobald der Spieler mit der Oberseite kollidiert, bleibt dieser daran hängen und fällt nicht. Das hat vermutlich damit zu tun, dass die errechnete Höhe noch nicht erreicht ist und somit weiter gesprungen wird, obwohl eine Richtungsänderung vorliegt. Dies bedeutet, dass ich an einem neuen Konzept für die Sprunghöhe arbeiten muss. Meine Idee wäre es, eine Sprungkraft zu definieren, die zeitbedingt abfällt, wenn man sich in der Luft befindet. 
 <br/>Ein weiterer Punkt ist die Flugkurve. Diese läuft noch sehr linear und der Spieler spring in einer Dreiecksform. <br/>
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/Sprung_dreieck.png"/><br/>
