@@ -199,15 +199,15 @@ Die Bewegung auf der y-Achse funktioniert ähnlich. Zuerst wird die Figur bewegt
 In der Luft wird velDY zusätzlich mit einer Schwerkraftsvariable verrechnet. Diese zieht die Figur nach und nach wieder nach unten. Somit wird auch die Sprungkurve realisiert. Die Berechnung rechnet für jedes Bild einen Faktor aus, multipliziert diesen mit der gravity Variable und addiert diesen zu velDY. Dadurch verringert sich die Bewegung nach oben immer weiter, bis sie schließlich die Richtung ändert und ein Fallen ermöglicht. Für die Berechnung wird eine konstante Framerate benötigt, da die Sprünge sonst inkonstant werden. 
 ```cpp
 if (air) {
-		//Berechnung des Zeitfaktors dt
-		flPrevTime = flCurTime;
-		flCurTime = SDL_GetTicks();
-		dt = (flCurTime - flPrevTime) * 0.001;
-		if (dt >= 0.007) {
-			dt = 0.007;
-		}
-		velDY = velDY + gravity * dt;
+	//Berechnung des Zeitfaktors dt
+	flPrevTime = flCurTime;
+	flCurTime = SDL_GetTicks();
+	dt = (flCurTime - flPrevTime) * 0.001;
+	if (dt >= 0.007) {
+		dt = 0.007;
 	}
+	velDY = velDY + gravity * dt;
+}
 ``` 
 Fällt die Figur auf ein Objekt, kann es vorkommen, dass die Bewegung nach unten höher ist als der Abstand zum Boden. Somit wird diese Bewegung zurückgesetzt und die Figur bleibt in der Luft stehen. Um dies zu verhindern, wird die Figur in diesem Fall die restliche Route bewegt und landet immer auf dem Boden.
 
