@@ -53,11 +53,11 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		isRunning = false;
 	}
 
-	
+	initLevel();
 	player.setDest(800, 704, 32, 32);
 	player.setSrc(0, 0, 32, 32);
 	player.setImg("model/test.png", renderer);
-	initLevel();
+	
 	
 }
 
@@ -69,41 +69,12 @@ void Game::eventHandler() {
 		isRunning = false;
 		break;
 	case SDL_KEYDOWN:	
-		/*if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_LEFT] && !air) {
-			printf("LEFT and SPACE Keys Pressed.\n");
-			if (!jumpCharge) {
-				jumpTimer = SDL_GetTicks();
-				jumpCharge = true;
-			}
-			if ((SDL_GetTicks() - jumpTimer) >= 3000) {
-				std::cout << "SPACE AND LEFT hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl ;
-				jumpCharge = false;
-				velDY = -(MAX_JUMPTIME * 0.001);
-				//velDY= -((SDL_GetTicks() - jumpTimer) * 0.001);
-
-				velDX = -velX;
-				
-			}
-		}*/
 		if (e.key.keysym.sym == SDLK_RIGHT && !air &&!jumpCharge) {
-			std::cout << "RIGHT down" << "\n";
-
 			velDX = velX;
 		}
 		if (e.key.keysym.sym == SDLK_LEFT && !air && !jumpCharge) {
-			std::cout << "LEFT down" << "\n";	
 			velDX = -velX;
 		}
-		if (e.key.keysym.sym == SDLK_UP && !air) {
-
-			velDY = -velY;
-		}
-		if (e.key.keysym.sym == SDLK_DOWN && !air) {
-
-			velDY = velY;
-		}
-
-	
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_RIGHT] && !air) {
 			if (!jumpCharge) {
 				jumpTimer = SDL_GetTicks();
@@ -111,9 +82,7 @@ void Game::eventHandler() {
 			}
 			else {
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
-					std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump! " << endl;
 					velDY = -(MAX_JUMPTIME * 0.001);
-					std::cout << "SPACE AND RIGHT hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "VEL: " << -((SDL_GetTicks() - jumpTimer) * 0.001) << endl;
 					velDX = velX;
 					jumpCharge = false;
 				}
@@ -126,9 +95,7 @@ void Game::eventHandler() {
 			}
 			else {
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
-					std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump! " << endl;
 					velDY = -(MAX_JUMPTIME * 0.001);
-					std::cout << "SPACE AND RIGHT hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "VEL: " << -((SDL_GetTicks() - jumpTimer) * 0.001) << endl;
 					velDX = -velX;
 					jumpCharge = false;
 				}
@@ -136,14 +103,12 @@ void Game::eventHandler() {
 		}
 
 		if (e.key.keysym.sym == SDLK_SPACE && !air) {
-			std::cout << "SPACE down" << "\n";
 			if (!jumpCharge) {
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
 			}
 			else {
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
-					std::cout << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "jump! " << endl;
 					velDY = -(MAX_JUMPTIME * 0.001);
 					jumpCharge = false;
 				}
@@ -152,42 +117,24 @@ void Game::eventHandler() {
 		break;
 	case SDL_KEYUP:
 		if (e.key.keysym.sym == SDLK_LEFT && !air) {
-			std::cout << "LEFT up" << "\n";
-			//mX = 0;
 			velDX = 0;
 		}
 		else if (e.key.keysym.sym == SDLK_RIGHT && !air) {
-			std::cout << "RIGHT up" << "\n";
-			//mX = 0;
 			velDX = 0;
 		}
-		if (e.key.keysym.sym == SDLK_UP && !air) {
-			//mY = 0;
-			velDY = 0;
-		}
-		if (e.key.keysym.sym == SDLK_DOWN && !air) {
-			//mY = 0;
-			velDY = 0;
-		}
 		if (e.key.keysym.sym == SDLK_SPACE) {
-			std::cout << "SPACE up" << "\n";
 			if (jumpCharge) {
 				if (keystate[SDL_SCANCODE_LEFT] && !air) {
-					std::cout <<  "SPACE AND LEFT hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "VEL: " << -((SDL_GetTicks() - jumpTimer) * 0.001) << endl;
 					velDX = -velX;
 					velDY = -((SDL_GetTicks() - jumpTimer) * 0.001);
 				}else if (keystate[SDL_SCANCODE_RIGHT] && !air) {
-					std::cout << "SPACE AND RIGHT hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "VEL: " << -((SDL_GetTicks() - jumpTimer) * 0.001) << endl;
 					velDX = velX;
 					velDY = -((SDL_GetTicks() - jumpTimer) * 0.001);
 				}
 				else {
-					std::cout << keystate[SDL_SCANCODE_LEFT] << "SPACE hold down for " << SDL_GetTicks() - jumpTimer << " Miliseconds" << endl << "Jumpheight: " << TILE_SIZE*(SDL_GetTicks() - jumpTimer) * 0.001 << endl;
 					velDY = -((SDL_GetTicks() - jumpTimer) * 0.001);
-					
 				}
 				jumpCharge = false;
-				
 			} 
 		}
 		break;
@@ -200,7 +147,6 @@ void Game::eventHandler() {
 void Game::draw(Object o) {
 	SDL_Rect dest = o.getDest();
 	SDL_Rect src = o.getSrc();
-	//SDL_RenderCopyEx(renderer, o.getTex(), &src, &dest, 0,NULL, SDL_FLIP_NONE);
 	SDL_RenderCopy(renderer, o.getTex(), &src, &dest);
 	
 }
@@ -208,7 +154,6 @@ void Game::draw(Object o) {
 void Game::update() {
 	calcMovement();
 	calcAir();
-	colision = false;
 }
 
 
@@ -224,7 +169,7 @@ void Game::render() {
 void Game::initLevel() {
 	velX = 1;
 	velY = 1;
-	loadMap("res/test.map");
+	loadMap("res/1.map");
 }
 
 void Game::loadMap(const char* filename) {
