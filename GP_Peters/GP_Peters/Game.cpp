@@ -47,11 +47,11 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		isRunning = false;
 	}
 
-	initLevel();
+	
 	player.setDest(800, 704, 32, 32);
 	player.setSrc(0, 0, 32, 32);
 	player.setImg("model/test.png", renderer);
-	
+	initLevel();
 	
 }
 
@@ -157,8 +157,9 @@ void Game::update() {
 
 void Game::render() {
 	SDL_RenderClear(renderer);
-	drawMap();
 	draw(player);
+	drawMap();
+	
 	SDL_RenderPresent(renderer);
 	
 }
@@ -193,6 +194,12 @@ void Game::loadMap(const char* filename) {
 			if (current != 0) {
 				tmp.setSrc(((current - 1)*TILE_SIZE), 0, TILE_SIZE, TILE_SIZE);
 				tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
+				if (current == 3) {
+					tmp.setSolid(false);
+				}
+				else {
+					tmp.setSolid(true);
+				}
 				map.push_back(tmp);
 			}
 		}
@@ -253,31 +260,27 @@ bool Game::checkCollision(Object a, Object b) {
 
 void Game::calcMovement() {
 	if (air) {
-		/**/
 		flPrevTime = flCurTime;
 		flCurTime = SDL_GetTicks();
 		dt = (flCurTime - flPrevTime) * 0.001;
-		cout << "dt " << dt << endl;
 		if (dt >= 0.007) {
 			dt = 0.007;
-			//dt = 0.03;
 		}
 		velDY = velDY + gravity * dt;
 	}
 
 	player.move(velDX, 0);
 	for (int i = 0; i < map.size(); i++) {
-		if (checkCollision(player, map[i]) == 1) {
+		if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
 			player.move(-velDX, 0);
 			if (air) {
 				velDX = velDX * -1;
 			}
-			
 		}
 	}
 	player.move(0, velDY);
 	for (int i = 0; i < map.size(); i++) {
-		if (checkCollision(player, map[i]) == 1) {
+		if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
 			player.move(0, -velDY);
 			if (velDY < 0) {
 				velDY = velDY * -1;
@@ -285,21 +288,19 @@ void Game::calcMovement() {
 			else {
 				groundCol = true;
 			}
-			
-			
 		}
 	}
 	if (groundCol) {
 		player.move(velDX, 0);
 		for (int i = 0; i < map.size(); i++) {
-			if (checkCollision(player, map[i]) == 1) {
+			if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
 				player.move(-velDX, 0);
 			}
 		}
 		while (!colision) {
 			player.move(0, 1);
 			for (int i = 0; i < map.size(); i++) {
-				if (checkCollision(player, map[i]) == 1) {
+				if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
 					player.move(0, -1);
 					colision = true;
 				}
@@ -313,7 +314,7 @@ void Game::calcMovement() {
 void Game::calcAir() {
 	player.move(0, 1);
 	for (int i = 0; i < map.size(); i++) {
-		if (checkCollision(player, map[i]) == 1) {
+		if (checkCollision(player, map[i]) == 1 && map[i].getSolid() && map[i].getSolid()) {
 			colision = true;
 		}
 	}
@@ -324,7 +325,6 @@ void Game::calcAir() {
 			velDY = 0;
 			air = false;
 		}
-		
 	}
 	else {
 		air = true;
