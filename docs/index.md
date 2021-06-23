@@ -218,4 +218,5 @@ Die Bewegung im Spiel ist im folgenden Video zu sehen:
 Um eine konstante Sprungkurve zu ermöglichen, müssen auch die Frames konstant sein. Zusätzlich dazu vermeidet eine Limitierung der Framerate unnötigen Ressourcenverbrauch.
 Diese Limitierung ist ziemlich simpel. Es wird zuerst errechnet, wie viel Verzögerung zwischen den Bildern benötigt wird. Wird dieser unterschritten, wird mithilfe von SDL_Delay die nächste Ausführung des Gameloops verzögert.
 
+#### Animation und Texturen
 
