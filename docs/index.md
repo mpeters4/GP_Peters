@@ -211,6 +211,8 @@ if (air) {
 ``` 
 Fällt die Figur auf ein Objekt, kann es vorkommen, dass die Bewegung nach unten höher ist als der Abstand zum Boden. Somit wird diese Bewegung zurückgesetzt und die Figur bleibt in der Luft stehen. Um dies zu verhindern, wird die Figur in diesem Fall die restliche Route bewegt und landet immer auf dem Boden.
 
+Die Bewegung im Spiel ist im folgenden Video zu sehen:
+{% include youtubePlayer.html id=-KlYuiTADXI %}
 #### Konstante Framerate
 Um eine konstante Sprungkurve zu ermöglichen, müssen auch die Frames konstant sein. Zusätzlich dazu vermeidet eine Limitierung der Framerate unnötigen Ressourcenverbrauch.
 Diese Limitierung ist ziemlich simpel. Es wird zuerst errechnet, wie viel Verzögerung zwischen den Bildern benötigt wird. Wird dieser unterschritten, wird mithilfe von SDL_Delay die nächste Ausführung des Gameloops verzögert.
