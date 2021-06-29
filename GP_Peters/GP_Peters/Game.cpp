@@ -8,7 +8,9 @@ using namespace std;
 #define TILE_SIZE 32
 #define MAX_JUMPTIME 2000
 
-Object player;
+Player player;
+
+//Object player;
 bool jumpCharge = false;
 Uint32 jumpTimer = 0;
 const Uint8* keystate = SDL_GetKeyboardState(NULL);
@@ -24,6 +26,11 @@ float velDX, velDY;
 float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
 float dt;
+//ANIMATION TEST
+int idolL = player.createCycle(0, 34, 58, 2, 40);
+int idolR = player.createCycle(1, 34, 58, 2, 40);
+int runL = player.createCycle(2, 34, 58, 2, 20);
+int runR = player.createCycle(3, 34, 58, 2, 20);
 
 Game::Game() {}
 Game::~Game() {
@@ -48,9 +55,10 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	}
 
 	
-	player.setDest(800, 704, 32, 32);
-	player.setSrc(0, 0, 32, 32);
-	player.setImg("model/test.png", renderer);
+	player.setDest(800, 678, 34, 58);
+	player.setSrc(0, 0, 34, 58);
+	player.setImg("model/playerTest.png", renderer);
+	player.setCurAnimation(idolR);
 	initLevel();
 	
 }
@@ -65,9 +73,17 @@ void Game::eventHandler() {
 	case SDL_KEYDOWN:	
 		if (e.key.keysym.sym == SDLK_RIGHT && !air &&!jumpCharge) {
 			velDX = velX;
+			if (player.getCurAnimation() != runR) {
+				player.setCurAnimation(runR);
+			}
+			
 		}
 		if (e.key.keysym.sym == SDLK_LEFT && !air && !jumpCharge) {
 			velDX = -velX;
+			if (player.getCurAnimation() != runL) {
+				player.setCurAnimation(runL);
+			}
+			
 		}
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_RIGHT] && !air) {
 			if (!jumpCharge) {
@@ -115,9 +131,11 @@ void Game::eventHandler() {
 	case SDL_KEYUP:
 		if (e.key.keysym.sym == SDLK_LEFT && !air) {
 			velDX = 0;
+			player.setCurAnimation(idolL);
 		}
 		else if (e.key.keysym.sym == SDLK_RIGHT && !air) {
 			velDX = 0;
+			player.setCurAnimation(idolR);
 		}
 		if (e.key.keysym.sym == SDLK_SPACE) {
 			if (jumpCharge) {
@@ -151,6 +169,8 @@ void Game::draw(Object o) {
 void Game::update() {
 	calcMovement();
 	calcAir();
+
+	player.updateAnimation();
 }
 
 
@@ -330,6 +350,10 @@ void Game::calcAir() {
 		air = true;
 	}
 	player.move(0, -1);
+}
+
+void Game::playerAnimation() {
+
 }
 
 

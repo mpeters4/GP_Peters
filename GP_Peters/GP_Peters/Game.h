@@ -26,6 +26,7 @@ public:
 	void calcAir();
 	void calcJump();
 	void calcMovement();
+	void playerAnimation();
 	bool checkCollision(Object a, Object b);
 	bool running() { return isRunning; };
 	
