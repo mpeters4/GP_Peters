@@ -39,14 +39,18 @@ void Object::moveY(float mY, float velY) {
 	dest.y = posY;
 }
 
-void Object::setPos(int mX, int mY){
-	dest.x = posX;
-	dest.y = posY;
+void Object::setPos(int x, int y){
+	dest.x = x;
+	dest.y = y;
+	posX = x;
+	posY = y;
+
 }
 
 void Object::move(float velX, float velY) {
 	posX += velX;
 	posY += velY;
-	setPos(posX, posY);
+	dest.x = posX;
+	dest.y = posY;
 }
 

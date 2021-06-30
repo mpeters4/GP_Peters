@@ -24,7 +24,7 @@ public:
 	void setSolid(bool solid);
 	void moveX(float mX, float velocity);
 	void moveY(float mY, float velY);
-	void setPos(int mX, int mY);
+	void setPos(int x, int y);
 	void move(float velX, float velY);
 
 };
