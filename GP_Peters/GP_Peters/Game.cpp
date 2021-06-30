@@ -2,6 +2,7 @@
 #include "TextureLoader.h"
 #include <iostream>
 #include <ctime>
+#include <sstream>
 
 using namespace std;
 
@@ -9,12 +10,11 @@ using namespace std;
 #define MAX_JUMPTIME 2000
 
 Player player;
-
+int level;
+int mapHeight;
 //Object player;
 bool jumpCharge = false;
-Uint32 jumpTimer = 0;
 const Uint8* keystate = SDL_GetKeyboardState(NULL);
-float gravity = 2;
 bool air = false;
 bool jump = false;
 bool colision = false;
@@ -22,10 +22,12 @@ bool groundCol = false;
 //movement
 float velX, velY;
 float velDX, velDY;
+float gravity =0;
 //JUMP motion
 float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
 float dt;
+Uint32 jumpTimer = 0;
 //ANIMATION TEST
 int idolL = player.createCycle(0, 34, 58, 2, 40);
 int idolR = player.createCycle(1, 34, 58, 2, 40);
@@ -39,6 +41,7 @@ Game::~Game() {
 
 void Game::init(const char* title, int x, int y, int width, int height, bool fullscreen) {
 	int fs = 0;
+	mapHeight = height;
 	if (fullscreen) {
 		fs = SDL_WINDOW_FULLSCREEN;
 	}
@@ -54,7 +57,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		isRunning = false;
 	}
 
-	
+	level = 1;
 	player.setDest(800, 678, 34, 58);
 	player.setSrc(0, 0, 34, 58);
 	player.setImg("model/playerTest.png", renderer);
@@ -167,6 +170,24 @@ void Game::draw(Object o) {
 }
 
 void Game::update() {
+	if (player.getDest().y < 0) {
+		level++;
+		cout << "NEXTLEVEL" << endl;
+		
+		player.setPos(player.getDest().x, mapHeight);
+		std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
+		initLevel();
+		
+
+	}
+	else if (player.getDest().y > mapHeight) {
+		level--;
+		
+		player.setPos(player.getDest().x, 0);
+		std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
+		cout << "PREVLEVEL" << endl;
+		initLevel();
+	}
 	calcMovement();
 	calcAir();
 
@@ -185,12 +206,15 @@ void Game::render() {
 }
 
 void Game::initLevel() {
-	velX = 1;
-	velY = 1;
-	loadMap("res/1.map");
+	ostringstream os;
+	os << "res/" << level << ".map";
+	loadMap(os.str().c_str());
+	std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
+	std::cout << os.str() << endl << "velX" << velX << " velY" << velY <<  " grav" << gravity << endl;
 }
 
 void Game::loadMap(const char* filename) {
+	map.clear();
 	int current, x, y, w, h;
 	Object tmp;
 	tmp.setImg("model/tiles.png", renderer);
@@ -203,6 +227,9 @@ void Game::loadMap(const char* filename) {
 	in >> h;
 	in >> x;
 	in >> y;
+	in >> velX;
+	in >> velY;
+	in >> gravity;
 	cout << w << endl << h << endl << x << endl << y << endl;
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
