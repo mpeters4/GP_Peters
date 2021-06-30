@@ -14,15 +14,20 @@ int Player::createCycle(int row, int w, int h, int spriteAmount, int cycleSpeed)
 }
 
 void Player::updateAnimation() {
-	std::cout << begin << std::endl;
-	setSrc(animations[curAni].w * animations[curAni].curTex, animations[curAni].row*animations[curAni].h, animations[curAni].w, animations[curAni].h);
-	if (begin > animations[curAni].cycleSpeed) {
-		animations[curAni].curTex++;
-		begin = 0;
+	if (animations[curAni].spriteAmount > 1) {
+		std::cout << begin << std::endl;
+		setSrc(animations[curAni].w * animations[curAni].curTex, animations[curAni].row * animations[curAni].h, animations[curAni].w, animations[curAni].h);
+		if (begin > animations[curAni].cycleSpeed) {
+			animations[curAni].curTex++;
+			begin = 0;
+		}
+		begin++;
+		if (animations[curAni].curTex >= animations[curAni].spriteAmount) {
+			animations[curAni].curTex = 0;
+		}
 	}
-	begin++;
-	if (animations[curAni].curTex >= animations[curAni].spriteAmount) {
-		animations[curAni].curTex = 0;
+	else {
+		setSrc(animations[curAni].w * animations[curAni].curTex, animations[curAni].row * animations[curAni].h, animations[curAni].w, animations[curAni].h);
 	}
 }
 
