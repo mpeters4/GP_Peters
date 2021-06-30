@@ -31,8 +31,14 @@ Uint32 jumpTimer = 0;
 //ANIMATION TEST
 int idolL = player.createCycle(0, 34, 58, 2, 40);
 int idolR = player.createCycle(1, 34, 58, 2, 40);
-int runL = player.createCycle(2, 34, 58, 2, 20);
-int runR = player.createCycle(3, 34, 58, 2, 20);
+int runL = player.createCycle(2, 34, 58, 4, 20);
+int runR = player.createCycle(3, 34, 58, 4, 20);
+int jumpChargeL = player.createCycle(4, 34, 58, 1, 20);
+int jumpChargeR = player.createCycle(5, 34, 58, 1, 20);
+int jumpL = player.createCycle(6, 34, 58, 1, 20);
+int jumpR = player.createCycle(7, 34, 58, 1, 20);
+
+
 
 Game::Game() {}
 Game::~Game() {
@@ -60,7 +66,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	level = 1;
 	player.setDest(800, 678, 34, 58);
 	player.setSrc(0, 0, 34, 58);
-	player.setImg("model/playerTest.png", renderer);
+	player.setImg("model/GP_Player_sprite.png", renderer);
 	player.setCurAnimation(idolR);
 	initLevel();
 	
@@ -93,6 +99,7 @@ void Game::eventHandler() {
 				velDX = 0;
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
+				player.setCurAnimation(jumpChargeR);
 			}
 			else {
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
@@ -107,6 +114,7 @@ void Game::eventHandler() {
 				velDX = 0;
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
+				player.setCurAnimation(jumpChargeL);
 			}else  {
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
 					jumpCharge = false;
@@ -122,6 +130,12 @@ void Game::eventHandler() {
 				velDX = 0;
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
+				if (player.getCurAnimation() % 2 == 0) {
+					player.setCurAnimation(jumpChargeL);
+				}
+				else {
+					player.setCurAnimation(jumpChargeR);
+				}
 			}
 			else {
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
@@ -173,16 +187,12 @@ void Game::update() {
 	if (player.getDest().y < 0) {
 		level++;
 		cout << "NEXTLEVEL" << endl;
-		
 		player.setPos(player.getDest().x, mapHeight);
 		std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
 		initLevel();
-		
-
 	}
 	else if (player.getDest().y > mapHeight) {
 		level--;
-		
 		player.setPos(player.getDest().x, 0);
 		std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
 		cout << "PREVLEVEL" << endl;
@@ -190,7 +200,6 @@ void Game::update() {
 	}
 	calcMovement();
 	calcAir();
-
 	player.updateAnimation();
 }
 
@@ -314,6 +323,20 @@ void Game::calcMovement() {
 			dt = 0.007;
 		}
 		velDY = velDY + gravity * dt;
+		if (player.getCurAnimation() % 2 == 0) {
+			player.setCurAnimation(jumpL);
+		}
+		else {
+			player.setCurAnimation(jumpR);
+		}
+	}
+	else {
+		if (player.getCurAnimation()== jumpL) {
+			player.setCurAnimation(idolL);
+		}
+		else if (player.getCurAnimation() == jumpR) {
+			player.setCurAnimation(idolR);
+		}
 	}
 
 	player.move(velDX, 0);
