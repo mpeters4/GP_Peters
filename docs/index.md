@@ -232,13 +232,46 @@ Mithilfe von Piskel habe ich der Spielfigur eine neue Optik gegeben. In dieser s
 <img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/playersprites_doc.png"/><br/>
 
 ### 01.07.2021 Fehlerbehebung, Texturüberarbeitung, Animationen und neuen Kartenabschnitt laden
-Die Texturen haben noch eine unsichtbare Kollision offen gelassen. Daher mussten alle Texturen noch einmal angepasst werden. Des Weiteren wurden die Animationen im Code umgesetzt und das übergehen in den nächsten Kartenabschnitt ist jetzt auch möglich. Auch ein aufgefallener Fehler in der Steuerung wurde behoben.
+Die Texturen haben noch eine unsichtbare Kollision offengelassen. Daher mussten alle Texturen noch einmal angepasst werden. Des Weiteren wurden die Animationen im Code umgesetzt und das übergehen in den nächsten Kartenabschnitt ist jetzt auch möglich. Auch ein aufgefallener Fehler in der Steuerung wurde behoben.
 Damit sind soweit alle grundlegenden Spielmechaniken meines Wissens nach fehlerfrei umgesetzt. Die weitere Zeit wird jetzt dafür genutzt, das Spielfeld mithilfe von .map Dateien zu erstellen, Texturen für dieses zu erstellen und Musik bzw. Geräusche zu erstellen. Wenn diese Punkte problemlos umgesetzt werden können, sollte noch ein wenig Zeit für Zusatzfunktionen sein.
 
 #### Texturüberarbeitung
+Der Schwanz des Affen war breiter als die Hinterbeine. Somit konnte die Figur länger auf einer Plattform stehen, als durch die Textur vermutet. 
+<br/><img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/texturerror.png"/><br/>
+Außerdem war eine andere Anordnung für eine einfachere Anwendung der Animationen sinnvoll. Die überarbeiteten Texturen sehen wie folgt aus:
+<br/><img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/UPDATEDplayersprites_doc.png"/><br/>
 
-#### Animationen
+#### Animationen und Player Klasse
+Um der Spielfigur Animationen zuzuweisen, wurde die Player Klasse entworfen. Diese erbt von Object und fügt dieser nur den Animationszyklus hinzu. Die Texturdatei wurde so überarbeitet, dass jeder Animationszyklus in einer Reihe dargestellt wird. Mit createCycle wird ein Zyklus erstellt. Dazu wird die Reihe, die Maße einer Textur, die Anzahl der Texturen und die Animationszeit angegeben. Die Animationen werden dann in einem Vektor gespeichert.
+Mit der Funktion setCurAnimation wird der Index der benötigten Animation im Vektor gesetzt. Die Animation selbst wird mit "updateAnimation" ausgeführt. Gibt es mehr als eine Textur in dem benötigten Zyklus, wird der Figur einfach die als Nächstes benötigte Stelle in der Bilddatei zugewiesen. Sobald die Animation am letzten Bild ankommt, wird diese zurückgesetzt und beginnt von neu. Diese Funktion wird mit jedem Gameloop ausgeführt. Die Animationsgeschwindigkeit bestimmt, nach wie vielen Gameloop Durchläufen auf die nächste Textur gewechselt wird. Somit entsteht die Animation der Spielfigur. 
 
 #### Fehlerbehebung
+Das Springen bei maximaler Sprungaufladung konnte umgangen werden und der Sprung so unendlich lange aufgeladen werden. Dementsprechend ist die Spielfigur auch viel zu hoch gesprungen. Dies wurde im eventHandler verursacht. Es war möglich, die Hilfsvariable jumpCharge, während der Sprungaufladung kurzzeitig auf 0 zu setzen und somit das automatische Abspringen zu umgehen. Der Grund dafür war das mehrfache Verarbeiten der Leertaste im eventHandling. Der Sprung bei maximaler Aufladung wird nun in der calcMovement Funktion verarbeitet, damit die Hilfsvariable nicht länger durch ein zweites Event beeinflusst werden kann. Die Events für Leertaste in Kombination mit links bzw. rechts ist somit nicht länger notwendig und wurden entfernt.
+```cpp
+//Verarbeitung in calcMovement
+if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
+	//Die Verarbeitung von links bzw. rechts beim abspringen
+	if (keystate[SDL_SCANCODE_RIGHT]) {
+		velDX = velX;
+	}
+	else if (keystate[SDL_SCANCODE_LEFT]) {
+		velDX = -velX;
+	}
+	velDY = -velY * (MAX_JUMPTIME * 0.0015);	
+```
 
-#### Kartenabschnitt laden
+#### Kartenabschnitt laden 
+Sobald der Spieler das Spielfeld auf der Y-Achse verlässt, muss die nächste bzw. vorherige Karte geladen werden. Dazu wurde eine integer Variable angelegt, die das aktuelle Level enthält. Diese wird einfach hoch oder runter gezählt, sobald der Spieler die jeweilige Grenze erreicht. Jetzt muss die Spielfigur an den gegenüberliegenden Fensterrand gesetzt werden und die nächste Karte initialisiert werden. In der initLevel Funktion wird daraus der benötigte Dateiname generiert und wie bereits vorher mit loadMap aus einer .map Datei geladen.
+
+```cpp
+if (player.getDest().y < 0) {
+	level++;
+	player.setPos(player.getDest().x, mapHeight);
+	initLevel();
+}
+else if (player.getDest().y > mapHeight) {
+	level--;
+	player.setPos(player.getDest().x, 0);
+	initLevel();
+}
+```
