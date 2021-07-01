@@ -29,14 +29,7 @@ float flCurTime = SDL_GetTicks();
 float dt;
 Uint32 jumpTimer = 0;
 //ANIMATION TEST
-int idolL = player.createCycle(0, 34, 58, 2, 40);
-int idolR = player.createCycle(1, 34, 58, 2, 40);
-int runL = player.createCycle(2, 34, 58, 4, 20);
-int runR = player.createCycle(3, 34, 58, 4, 20);
-int jumpChargeL = player.createCycle(4, 34, 58, 1, 20);
-int jumpChargeR = player.createCycle(5, 34, 58, 1, 20);
-int jumpL = player.createCycle(6, 34, 58, 1, 20);
-int jumpR = player.createCycle(7, 34, 58, 1, 20);
+int idolL, idolR ,runL,runR ,jumpChargeL ,jumpChargeR ,jumpL ,jumpR;
 
 
 
@@ -64,10 +57,18 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	}
 
 	level = 1;
-	player.setDest(800, 678, 34, 58);
-	player.setSrc(0, 0, 34, 58);
+	player.setDest(800, 518, 28, 58);
+	player.setSrc(0, 0, 28, 58);
 	player.setImg("model/GP_Player_sprite.png", renderer);
 	player.setCurAnimation(idolR);
+	idolL = player.createCycle(0, player.getSrc().w, player.getSrc().h, 2, 50);
+	idolR = player.createCycle(1, player.getSrc().w, player.getSrc().h, 2, 50);
+	runL = player.createCycle(2, player.getSrc().w, player.getSrc().h, 4, 15);
+	runR = player.createCycle(3, player.getSrc().w, player.getSrc().h, 4, 15);
+	jumpChargeL = player.createCycle(4, player.getSrc().w, player.getSrc().h, 1, 20);
+	jumpChargeR = player.createCycle(5, player.getSrc().w, player.getSrc().h, 1, 20);
+	jumpL = player.createCycle(6, player.getSrc().w, player.getSrc().h, 1, 20);
+	jumpR = player.createCycle(7, player.getSrc().w, player.getSrc().h, 1, 20);
 	initLevel();
 	
 }
