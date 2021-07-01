@@ -237,7 +237,7 @@ Damit sind soweit alle grundlegenden Spielmechaniken meines Wissens nach fehlerf
 
 #### Texturüberarbeitung
 Der Schwanz des Affen war breiter als die Hinterbeine. Somit konnte die Figur länger auf einer Plattform stehen, als durch die Textur vermutet. 
-<br/><img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/texturerror.png"/><br/>
+<br/><img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/texturerror.PNG"/><br/>
 Außerdem war eine andere Anordnung für eine einfachere Anwendung der Animationen sinnvoll. Die überarbeiteten Texturen sehen wie folgt aus:
 <br/><img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/UPDATEDplayersprites_doc.png"/><br/>
 
