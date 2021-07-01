@@ -229,7 +229,7 @@ Diese Limitierung ist ziemlich simpel. Es wird zuerst errechnet, wie viel Verzö
 
 ### 28.06.2021 Neue Texturen für den Spielcharakter
 Mithilfe von Piskel habe ich der Spielfigur eine neue Optik gegeben. In dieser sind auch die benötigten Texturen für Animationen vorhanden. Verwendet wird diese Datei genauso wie in der Spielfeldgenerierung. Die benötigte Textur wird aus der gesamten Datei herausgeschnitten und entsprechend eingefügt. Beim Erstellen der Figur habe ich versucht, die eventuell kollidierenden Punkte immer mit einer visuellen Textur zu versehen.  Da ich nur mit Rechtecken arbeite, muss ich da besonders viel Wert drauf legen. Besonders gut zu sehen ist dies bei der Sprunganimation (die letzte Reihe im Bild). Hier war ich dazu gezwungen, die Figur beim Sprung den Arm heben zu lassen, um diese Kollision anzuzeigen. Andernfalls entstehen unsichtbare Kollisionen, die das Spielerlebnis stark negativ beeinflussen. Die erstellten Texturen sind in dem folgenden Bild zu sehen:<br/>
-<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/playersprites_doc.png"/><br/>
+<img src="https://raw.githubusercontent.com/mpeters4/GP_Peters/gh-pages/docs/img/OLDplayersprites_doc.png"/><br/>
 
 ### 01.07.2021 Fehlerbehebung, Texturüberarbeitung, Animationen und neuen Kartenabschnitt laden
 Die Texturen haben noch eine unsichtbare Kollision offengelassen. Daher mussten alle Texturen noch einmal angepasst werden. Des Weiteren wurden die Animationen im Code umgesetzt und das übergehen in den nächsten Kartenabschnitt ist jetzt auch möglich. Auch ein aufgefallener Fehler in der Steuerung wurde behoben.
