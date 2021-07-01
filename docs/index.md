@@ -261,7 +261,7 @@ if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
 ```
 
 #### Kartenabschnitt laden 
-Sobald der Spieler das Spielfeld auf der Y-Achse verlässt, muss die nächste bzw. vorherige Karte geladen werden. Dazu wurde eine integer Variable angelegt, die das aktuelle Level enthält. Diese wird einfach hoch oder runter gezählt, sobald der Spieler die jeweilige Grenze erreicht. Jetzt muss die Spielfigur an den gegenüberliegenden Fensterrand gesetzt werden und die nächste Karte initialisiert werden. In der initLevel Funktion wird daraus der benötigte Dateiname generiert und wie bereits vorher mit loadMap aus einer .map Datei geladen.
+Sobald der Spieler das Spielfeld auf der Y-Achse verlässt, muss die nächste bzw. vorherige Karte geladen werden. Dazu wurde eine integer Variable angelegt, die das aktuelle Level enthält. Diese wird einfach hoch oder runter gezählt, sobald der Spieler die jeweilige Grenze erreicht. Jetzt muss die Spielfigur an den gegenüberliegenden Fensterrand gesetzt werden und die nächste Karte initialisiert werden. In der initLevel Funktion wird daraus der benötigte Dateiname generiert und mit der bereits bekannten mit loadMap aus einer .map Datei geladen.
 
 ```cpp
 if (player.getDest().y < 0) {
