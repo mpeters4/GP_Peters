@@ -80,29 +80,29 @@ void Game::eventHandler() {
 		isRunning = false;
 		break;
 	case SDL_KEYDOWN:	
-		if (e.key.keysym.sym == SDLK_RIGHT && !air &&!jumpCharge) {
+		if (keystate[SDL_SCANCODE_RIGHT] && !air && !jumpCharge) {
 			velDX = velX;
 			if (player.getCurAnimation() != runR) {
 				player.setCurAnimation(runR);
 			}
-			
 		}
-		if (e.key.keysym.sym == SDLK_LEFT && !air && !jumpCharge) {
+		if (keystate[SDL_SCANCODE_LEFT] && !air && !jumpCharge) {
 			velDX = -velX;
 			if (player.getCurAnimation() != runL) {
 				player.setCurAnimation(runL);
-			}
-			
-		}
+			}	
+		}/*
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_RIGHT] && !air) {
 			if (!jumpCharge) {
 				velDX = 0;
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
 				player.setCurAnimation(jumpChargeR);
+				cout << "SPACE RIGHT " << endl;
 			}
 			else {
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
+					cout << "SPACE RIGHT JUMP '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' " << endl;
 					velDY = -velY * (MAX_JUMPTIME * 0.0015);
 					velDX = velX;
 					jumpCharge = false;
@@ -110,22 +110,26 @@ void Game::eventHandler() {
 			}
 		}
 		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_LEFT] && !air) {
+			
 			if (!jumpCharge ) {
 				velDX = 0;
 				jumpTimer = SDL_GetTicks();
 				jumpCharge = true;
 				player.setCurAnimation(jumpChargeL);
+				cout << "SPACE LEFT " << endl;
 			}else  {
+				
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
+					cout << "SPACE LEFT JUMP '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' " << endl;
 					jumpCharge = false;
 					velDY = -velY * (MAX_JUMPTIME * 0.0015);
 					velDX = -velX;
 					
 				}
 			}
-		}
+		}*/
 
-		if (e.key.keysym.sym == SDLK_SPACE && !air) {
+		if (keystate[SDL_SCANCODE_SPACE] && !air) {
 			if (!jumpCharge && velDY == 0) {
 				velDX = 0;
 				jumpTimer = SDL_GetTicks();
@@ -137,20 +141,21 @@ void Game::eventHandler() {
 					player.setCurAnimation(jumpChargeR);
 				}
 			}
-			else {
+			else {/*
 				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
+					cout << "SPACE ONLY JUMP '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' " << endl;
 					velDY = -velY * (MAX_JUMPTIME * 0.0015);
 					jumpCharge = false;
-				}
+				}*/
 			}
 		}
 		break;
 	case SDL_KEYUP:
-		if (e.key.keysym.sym == SDLK_LEFT && !air) {
+		if (e.key.keysym.sym == SDLK_LEFT && !air && !jumpCharge) {
 			velDX = 0;
 			player.setCurAnimation(idolL);
 		}
-		else if (e.key.keysym.sym == SDLK_RIGHT && !air) {
+		else if (e.key.keysym.sym == SDLK_RIGHT && !air && !jumpCharge) {
 			velDX = 0;
 			player.setCurAnimation(idolR);
 		}
@@ -159,14 +164,18 @@ void Game::eventHandler() {
 				if (keystate[SDL_SCANCODE_LEFT] && !air) {
 					velDX = -velX;
 					velDY = - velY *((SDL_GetTicks() - jumpTimer) * 0.0015);
+					jumpCharge = false;
 				}else if (keystate[SDL_SCANCODE_RIGHT] && !air) {
 					velDX = velX;
 					velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
+					jumpCharge = false;
 				}
-				else if(!air) {
+				else if(!air && !keystate[SDL_SCANCODE_SPACE]) {
 					velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
+					jumpCharge = false;
 				}
-				jumpCharge = false;
+				
+				
 			} 
 		}
 		break;
@@ -186,17 +195,19 @@ void Game::draw(Object o) {
 void Game::update() {
 	if (player.getDest().y < 0) {
 		level++;
-		cout << "NEXTLEVEL" << endl;
 		player.setPos(player.getDest().x, mapHeight);
-		std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
 		initLevel();
 	}
 	else if (player.getDest().y > mapHeight) {
 		level--;
 		player.setPos(player.getDest().x, 0);
-		std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
-		cout << "PREVLEVEL" << endl;
 		initLevel();
+	}
+	if (jumpCharge && keystate[SDL_SCANCODE_LEFT]) {
+		player.setCurAnimation(jumpChargeL);
+	}
+	if (jumpCharge && keystate[SDL_SCANCODE_RIGHT]) {
+		player.setCurAnimation(jumpChargeR);
 	}
 	calcMovement();
 	calcAir();
@@ -315,6 +326,16 @@ bool Game::checkCollision(Object a, Object b) {
 
 
 void Game::calcMovement() {
+	if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
+		if (keystate[SDL_SCANCODE_RIGHT]) {
+			velDX = velX;
+		}
+		else if (keystate[SDL_SCANCODE_LEFT]) {
+			velDX = -velX;
+		}
+		velDY = -velY * (MAX_JUMPTIME * 0.0015);
+		jumpCharge = false;
+	}
 	if (air) {
 		flPrevTime = flCurTime;
 		flCurTime = SDL_GetTicks();
