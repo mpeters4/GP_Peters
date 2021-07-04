@@ -10,6 +10,7 @@ private:
 	//SDL_Rect src;
 	SDL_Texture* tex;
 	bool solid;
+	bool finish;
 public:
 	//SDL_Rect dest;
 	Object() { solid = true; };
@@ -26,5 +27,7 @@ public:
 	void moveY(float mY, float velY);
 	void setPos(int x, int y);
 	void move(float velX, float velY);
+	void setFinish(bool end);
+	bool getFinish()const { return finish; };
 
 };

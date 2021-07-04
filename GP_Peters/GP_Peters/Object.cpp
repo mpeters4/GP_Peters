@@ -28,6 +28,10 @@ void Object::setSolid(bool solid) {
 	Object::solid = solid;
 }
 
+void Object::setFinish(bool end) {
+	Object::finish = end;
+}
+
 //
 void Object::moveX(float mX, float velX) {
 	posX += velX * mX;
