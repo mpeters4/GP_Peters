@@ -15,7 +15,7 @@ int Player::createCycle(int row, int w, int h, int spriteAmount, int cycleSpeed)
 
 void Player::updateAnimation() {
 	if (animations[curAni].spriteAmount > 1) {
-		std::cout << begin << std::endl;
+		//std::cout << begin << std::endl;
 		setSrc(animations[curAni].w * animations[curAni].curTex, animations[curAni].row * animations[curAni].h, animations[curAni].w, animations[curAni].h);
 		if (begin > animations[curAni].cycleSpeed) {
 			animations[curAni].curTex++;
