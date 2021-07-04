@@ -57,7 +57,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	}
 
 	level = 1;
-	player.setDest(800, 518, 28, 58);
+	player.setDest(120, 652, 28, 58);
 	player.setSrc(0, 0, 28, 58);
 	player.setImg("model/GP_Player_sprite.png", renderer);
 	player.setCurAnimation(idolR);
@@ -230,15 +230,15 @@ void Game::initLevel() {
 	ostringstream os;
 	os << "res/" << level << ".map";
 	loadMap(os.str().c_str());
-	std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
-	std::cout << os.str() << endl << "velX" << velX << " velY" << velY <<  " grav" << gravity << endl;
+	//std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
+	//std::cout << os.str() << endl << "velX" << velX << " velY" << velY <<  " grav" << gravity << endl;
 }
 
 void Game::loadMap(const char* filename) {
 	map.clear();
 	int current, x, y, w, h;
 	Object tmp;
-	tmp.setImg("model/tiles.png", renderer);
+	tmp.setImg("model/TestNewTiles.png", renderer);
 	std::ifstream in(filename);
 	if (!in.is_open()) {
 		cerr << "ERROR wit loading file: " << filename << endl;
@@ -251,7 +251,7 @@ void Game::loadMap(const char* filename) {
 	in >> velX;
 	in >> velY;
 	in >> gravity;
-	cout << w << endl << h << endl << x << endl << y << endl;
+	//cout << w << endl << h << endl << x << endl << y << endl;
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
 			if (in.eof()) {
@@ -260,13 +260,21 @@ void Game::loadMap(const char* filename) {
 			}
 			in >> current;
 			if (current != 0) {
-				tmp.setSrc(((current - 1)*TILE_SIZE), 0, TILE_SIZE, TILE_SIZE);
+				tmp.setSrc(((current %10 )*TILE_SIZE), ((current/10))*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 				tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
-				if (current == 3) {
+				//cout <<"Cur " << current << " X "<<((current/ 10)) * TILE_SIZE << endl;
+				if (current > 20) {
 					tmp.setSolid(false);
 				}
 				else {
 					tmp.setSolid(true);
+				}
+				if (current == 40) {
+					tmp.setFinish(true);
+					tmp.setSolid(true);
+				}
+				else {
+					tmp.setFinish(false);
 				}
 				map.push_back(tmp);
 			}
@@ -364,6 +372,9 @@ void Game::calcMovement() {
 	player.move(velDX, 0);
 	for (int i = 0; i < map.size(); i++) {
 		if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
+			if (map[i].getFinish()) {
+				isRunning = false();
+			}
 			player.move(-velDX, 0);
 			if (air) {
 				velDX = velDX * -1;
