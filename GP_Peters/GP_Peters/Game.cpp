@@ -267,7 +267,7 @@ void Game::loadMap(const char* filename) {
 	map.clear();
 	int current, x, y, w, h;
 	Object tmp;
-	tmp.setImg("model/TestNewTiles.png", renderer);
+	tmp.setImg("model/tiles.png", renderer);
 	std::ifstream in(filename);
 	if (!in.is_open()) {
 		cerr << "ERROR wit loading file: " << filename << endl;
@@ -292,13 +292,13 @@ void Game::loadMap(const char* filename) {
 				tmp.setSrc(((current %10 )*TILE_SIZE), ((current/10))*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 				tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
 				//cout <<"Cur " << current << " X "<<((current/ 10)) * TILE_SIZE << endl;
-				if (current > 20) {
+				if (current > 39) {
 					tmp.setSolid(false);
 				}
 				else {
 					tmp.setSolid(true);
 				}
-				if (current == 40) {
+				if (current == 59) {
 					tmp.setFinish(true);
 					tmp.setSolid(true);
 				}
