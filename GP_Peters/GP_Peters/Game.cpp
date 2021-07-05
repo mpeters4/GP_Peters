@@ -10,6 +10,8 @@ using namespace std;
 #define MAX_JUMPTIME 2000
 
 Player player;
+Object background;
+TextureLoader tl;
 int level;
 int mapHeight;
 //Object player;
@@ -48,15 +50,38 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		window = SDL_CreateWindow(title, x, y, width, height, fs);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer) {
-			SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
+			isRunning = true;
+			level = 1;
+			background.setDest(0, 0, width, height);
+			background.setSrc(0, 0, width, height);
+			background.setImg("model/background.png", renderer);
+			player.setDest(120, 652, 28, 58);
+			player.setSrc(0, 0, 28, 58);
+			player.setImg("model/GP_Player_sprite.png", renderer);
+			player.setCurAnimation(idolR);
+			idolL = player.createCycle(0, player.getSrc().w, player.getSrc().h, 2, 50);
+			idolR = player.createCycle(1, player.getSrc().w, player.getSrc().h, 2, 50);
+			runL = player.createCycle(2, player.getSrc().w, player.getSrc().h, 4, 15);
+			runR = player.createCycle(3, player.getSrc().w, player.getSrc().h, 4, 15);
+			jumpChargeL = player.createCycle(4, player.getSrc().w, player.getSrc().h, 1, 20);
+			jumpChargeR = player.createCycle(5, player.getSrc().w, player.getSrc().h, 1, 20);
+			jumpL = player.createCycle(6, player.getSrc().w, player.getSrc().h, 1, 20);
+			jumpR = player.createCycle(7, player.getSrc().w, player.getSrc().h, 1, 20);
+			initLevel();
+
+		
+			//SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
 		}
-		isRunning = true;
+		
 	}
 	else {
 		isRunning = false;
 	}
-
+	/*
 	level = 1;
+	background.setDest(0, 0, width, height);
+	background.setSrc(0, 0, width, height);
+	background.setImg("model/background.png", renderer);
 	player.setDest(120, 652, 28, 58);
 	player.setSrc(0, 0, 28, 58);
 	player.setImg("model/GP_Player_sprite.png", renderer);
@@ -69,7 +94,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	jumpChargeR = player.createCycle(5, player.getSrc().w, player.getSrc().h, 1, 20);
 	jumpL = player.createCycle(6, player.getSrc().w, player.getSrc().h, 1, 20);
 	jumpR = player.createCycle(7, player.getSrc().w, player.getSrc().h, 1, 20);
-	initLevel();
+	initLevel();*/
 	
 }
 
@@ -193,6 +218,7 @@ void Game::draw(Object o) {
 	
 }
 
+
 void Game::update() {
 	if (player.getDest().y < 0) {
 		level++;
@@ -218,9 +244,12 @@ void Game::update() {
 
 
 void Game::render() {
+	
 	SDL_RenderClear(renderer);
+	draw(background);
 	draw(player);
 	drawMap();
+	
 	
 	SDL_RenderPresent(renderer);
 	
@@ -277,9 +306,11 @@ void Game::loadMap(const char* filename) {
 					tmp.setFinish(false);
 				}
 				map.push_back(tmp);
+				
 			}
 		}
 	}
+
 	in.close();
 }
 
