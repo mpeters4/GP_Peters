@@ -380,9 +380,12 @@ void Game::calcMovement() {
 		flPrevTime = flCurTime;
 		flCurTime = SDL_GetTicks();
 		dt = (flCurTime - flPrevTime) * 0.001;
-		if (dt >= 0.007) {
-			dt = 0.007;
+		cout << dt << endl;
+		if (dt >= 0.015) {
+			//dt = 0.007;
+			dt = 0.015;
 		}
+
 		velDY = velDY + gravity * dt;
 		if (player.getCurAnimation() % 2 == 0) {
 			player.setCurAnimation(jumpL);
