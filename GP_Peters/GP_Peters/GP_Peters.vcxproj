@@ -157,6 +157,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="TextureLoader.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="recources.rc" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
