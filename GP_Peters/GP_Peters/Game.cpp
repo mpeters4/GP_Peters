@@ -32,7 +32,7 @@ float flPrevTime = 0;
 float flCurTime = SDL_GetTicks();
 float dt;
 Uint32 jumpTimer = 0;
-//ANIMATION TEST
+//ANIMATIONS
 int idolL, idolR ,runL,runR ,jumpChargeL ,jumpChargeR ,jumpL ,jumpR;
 
 
@@ -69,9 +69,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 			jumpChargeR = player.createCycle(5, player.getSrc().w, player.getSrc().h, 1, 20);
 			jumpL = player.createCycle(6, player.getSrc().w, player.getSrc().h, 1, 20);
 			jumpR = player.createCycle(7, player.getSrc().w, player.getSrc().h, 1, 20);
-			initLevel();
-			//SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
-		}
+			initLevel();		}
 		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
 			cout << "ERROR:" << Mix_GetError() << endl;
 		}
@@ -83,26 +81,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 	}
 	else {
 		isRunning = false;
-	}
-	/*
-	level = 1;
-	background.setDest(0, 0, width, height);
-	background.setSrc(0, 0, width, height);
-	background.setImg("model/background.png", renderer);
-	player.setDest(120, 652, 28, 58);
-	player.setSrc(0, 0, 28, 58);
-	player.setImg("model/GP_Player_sprite.png", renderer);
-	player.setCurAnimation(idolR);
-	idolL = player.createCycle(0, player.getSrc().w, player.getSrc().h, 2, 50);
-	idolR = player.createCycle(1, player.getSrc().w, player.getSrc().h, 2, 50);
-	runL = player.createCycle(2, player.getSrc().w, player.getSrc().h, 4, 15);
-	runR = player.createCycle(3, player.getSrc().w, player.getSrc().h, 4, 15);
-	jumpChargeL = player.createCycle(4, player.getSrc().w, player.getSrc().h, 1, 20);
-	jumpChargeR = player.createCycle(5, player.getSrc().w, player.getSrc().h, 1, 20);
-	jumpL = player.createCycle(6, player.getSrc().w, player.getSrc().h, 1, 20);
-	jumpR = player.createCycle(7, player.getSrc().w, player.getSrc().h, 1, 20);
-	initLevel();*/
-	
+	}	
 }
 
 void Game::eventHandler() {
@@ -124,43 +103,7 @@ void Game::eventHandler() {
 			if (player.getCurAnimation() != runL) {
 				player.setCurAnimation(runL);
 			}	
-		}/*
-		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_RIGHT] && !air) {
-			if (!jumpCharge) {
-				velDX = 0;
-				jumpTimer = SDL_GetTicks();
-				jumpCharge = true;
-				player.setCurAnimation(jumpChargeR);
-				cout << "SPACE RIGHT " << endl;
-			}
-			else {
-				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
-					cout << "SPACE RIGHT JUMP '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' " << endl;
-					velDY = -velY * (MAX_JUMPTIME * 0.0015);
-					velDX = velX;
-					jumpCharge = false;
-				}
-			}
 		}
-		if (keystate[SDL_SCANCODE_SPACE] && keystate[SDL_SCANCODE_LEFT] && !air) {
-			
-			if (!jumpCharge ) {
-				velDX = 0;
-				jumpTimer = SDL_GetTicks();
-				jumpCharge = true;
-				player.setCurAnimation(jumpChargeL);
-				cout << "SPACE LEFT " << endl;
-			}else  {
-				
-				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
-					cout << "SPACE LEFT JUMP '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' " << endl;
-					jumpCharge = false;
-					velDY = -velY * (MAX_JUMPTIME * 0.0015);
-					velDX = -velX;
-					
-				}
-			}
-		}*/
 
 		if (keystate[SDL_SCANCODE_SPACE] && !air) {
 			if (!jumpCharge && velDY == 0) {
@@ -173,13 +116,6 @@ void Game::eventHandler() {
 				else {
 					player.setCurAnimation(jumpChargeR);
 				}
-			}
-			else {/*
-				if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME) {
-					cout << "SPACE ONLY JUMP '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' " << endl;
-					velDY = -velY * (MAX_JUMPTIME * 0.0015);
-					jumpCharge = false;
-				}*/
 			}
 		}
 		break;
@@ -266,8 +202,6 @@ void Game::initLevel() {
 	ostringstream os;
 	os << "res/" << level << ".map";
 	loadMap(os.str().c_str());
-	//std::cout << "X " << player.getDest().x << " Y " << player.getDest().y << endl;
-	//std::cout << os.str() << endl << "velX" << velX << " velY" << velY <<  " grav" << gravity << endl;
 }
 
 void Game::loadMap(const char* filename) {
