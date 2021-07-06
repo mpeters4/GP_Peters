@@ -8,7 +8,7 @@
 using namespace std;
 
 #define TILE_SIZE 32
-#define MAX_JUMPTIME 2000
+#define MAX_JUMPTIME 1000
 
 Player player;
 Object background;
@@ -24,7 +24,8 @@ bool jump = false;
 bool colision = false;
 bool groundCol = false;
 //movement
-float velX, velY;
+int velX, velY;
+int velAir;
 float velDX, velDY;
 float gravity =0;
 //JUMP motion
@@ -131,18 +132,20 @@ void Game::eventHandler() {
 		if (e.key.keysym.sym == SDLK_SPACE) {
 			if (jumpCharge) {
 				if (keystate[SDL_SCANCODE_LEFT] && !air) {
-					velDX = -velX;
-					velDY = - velY *((SDL_GetTicks() - jumpTimer) * 0.0015);
-					jumpCharge = false;
+					velDX = -velAir;
+					//velDY = - velY *((SDL_GetTicks() - jumpTimer) * 0.0015);
+					//jumpCharge = false;
 				}else if (keystate[SDL_SCANCODE_RIGHT] && !air) {
-					velDX = velX;
-					velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
-					jumpCharge = false;
+					velDX = velAir;
+					//velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
+					//jumpCharge = false;
 				}
 				else if(!air && !keystate[SDL_SCANCODE_SPACE]) {
-					velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
-					jumpCharge = false;
+					//velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
+					//jumpCharge = false;
 				}
+				velDY = -velY * ((SDL_GetTicks() - jumpTimer)*2 * 0.0015);
+				jumpCharge = false;
 				Mix_PlayChannel(-1, player.getSoundJump(), 0);
 				
 			} 
@@ -163,6 +166,7 @@ void Game::draw(Object o) {
 
 
 void Game::update() {
+	cout << velDX << endl;
 	if (player.getDest().y < 0) {
 		level++;
 		player.setPos(player.getDest().x, mapHeight);
@@ -182,6 +186,7 @@ void Game::update() {
 	calcMovement();
 	calcAir();
 	player.updateAnimation();
+
 }
 
 
@@ -219,6 +224,7 @@ void Game::loadMap(const char* filename) {
 	in >> x;
 	in >> y;
 	in >> velX;
+	velAir = velX * 1.5;
 	in >> velY;
 	in >> gravity;
 	//cout << w << endl << h << endl << x << endl << y << endl;
@@ -309,12 +315,12 @@ bool Game::checkCollision(Object a, Object b) {
 void Game::calcMovement() {
 	if ((SDL_GetTicks() - jumpTimer) >= MAX_JUMPTIME && jumpCharge) {
 		if (keystate[SDL_SCANCODE_RIGHT]) {
-			velDX = velX;
+			velDX = velAir;
 		}
 		else if (keystate[SDL_SCANCODE_LEFT]) {
-			velDX = -velX;
+			velDX = -velAir;
 		}
-		velDY = -velY * (MAX_JUMPTIME * 0.0015);
+		velDY = -velY * (MAX_JUMPTIME*2 * 0.0015);
 		jumpCharge = false;
 		Mix_PlayChannel(-1, player.getSoundJump(), 0);
 	}
@@ -401,6 +407,7 @@ void Game::calcAir() {
 	if (colision) {
 		colision = false;
 		if (air) {
+			cout << "velX GR " << velDX << endl;
 			velDX = 0;
 			velDY = 0;
 			air = false;
@@ -409,6 +416,8 @@ void Game::calcAir() {
 	}
 	else {
 		air = true;
+		
+		cout << "velX Air " << velDX << " " << velAir << endl;
 	}
 	player.move(0, -1);
 }
