@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <sstream>
+#include <SDL_mixer.h>
 
 using namespace std;
 
@@ -11,7 +12,8 @@ using namespace std;
 
 Player player;
 Object background;
-TextureLoader tl;
+Mix_Music* bgm ;
+
 int level;
 int mapHeight;
 //Object player;
@@ -61,18 +63,23 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 			player.setCurAnimation(idolR);
 			idolL = player.createCycle(0, player.getSrc().w, player.getSrc().h, 2, 50);
 			idolR = player.createCycle(1, player.getSrc().w, player.getSrc().h, 2, 50);
-			runL = player.createCycle(2, player.getSrc().w, player.getSrc().h, 4, 15);
-			runR = player.createCycle(3, player.getSrc().w, player.getSrc().h, 4, 15);
+			runL = player.createCycle(2, player.getSrc().w, player.getSrc().h, 4, 5);
+			runR = player.createCycle(3, player.getSrc().w, player.getSrc().h, 4, 5);
 			jumpChargeL = player.createCycle(4, player.getSrc().w, player.getSrc().h, 1, 20);
 			jumpChargeR = player.createCycle(5, player.getSrc().w, player.getSrc().h, 1, 20);
 			jumpL = player.createCycle(6, player.getSrc().w, player.getSrc().h, 1, 20);
 			jumpR = player.createCycle(7, player.getSrc().w, player.getSrc().h, 1, 20);
 			initLevel();
-
-		
 			//SDL_SetRenderDrawColor(renderer, 135, 206, 235, 255);
 		}
-		
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+			cout << "ERROR:" << Mix_GetError() << endl;
+		}
+		else {
+			bgm =Mix_LoadMUS("res/background.mp3");
+			Mix_PlayMusic(bgm, -1);
+			player.setSounds(Mix_LoadWAV("res/jump.wav"), Mix_LoadWAV("res/step.wav"), Mix_LoadWAV("res/colision.wav"));
+		}
 	}
 	else {
 		isRunning = false;
@@ -200,7 +207,7 @@ void Game::eventHandler() {
 					velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
 					jumpCharge = false;
 				}
-				
+				Mix_PlayChannel(-1, player.getSoundJump(), 0);
 				
 			} 
 		}
@@ -375,6 +382,7 @@ void Game::calcMovement() {
 		}
 		velDY = -velY * (MAX_JUMPTIME * 0.0015);
 		jumpCharge = false;
+		Mix_PlayChannel(-1, player.getSoundJump(), 0);
 	}
 	if (air) {
 		flPrevTime = flCurTime;
@@ -382,7 +390,6 @@ void Game::calcMovement() {
 		dt = (flCurTime - flPrevTime) * 0.001;
 		cout << dt << endl;
 		if (dt >= 0.015) {
-			//dt = 0.007;
 			dt = 0.015;
 		}
 
@@ -412,6 +419,7 @@ void Game::calcMovement() {
 			player.move(-velDX, 0);
 			if (air) {
 				velDX = velDX * -1;
+				Mix_PlayChannel(-1, player.getSoundCol(), 0);
 			}
 		}
 	}
@@ -421,6 +429,7 @@ void Game::calcMovement() {
 			player.move(0, -velDY);
 			if (velDY < 0) {
 				velDY = velDY * -1;
+				Mix_PlayChannel(-1, player.getSoundCol(), 0);
 			}
 			else {
 				groundCol = true;
@@ -461,6 +470,7 @@ void Game::calcAir() {
 			velDX = 0;
 			velDY = 0;
 			air = false;
+			Mix_PlayChannel(-1, player.getSoundCol(), 0);
 		}
 	}
 	else {
@@ -477,6 +487,19 @@ void Game::playerAnimation() {
 void Game::clean() {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	SDL_DestroyTexture(player.getTex());
+	player.destroySounds();
+	player.destroy();
+
+	for (int i = 0; i < map.size(); i++) {
+		SDL_DestroyTexture(map[i].getTex());
+		map[i].destroy();
+	}
+	Mix_FreeMusic(bgm);
+	window = nullptr;
+	renderer = nullptr;
+	bgm = nullptr;
+	Mix_Quit();
 	SDL_Quit();
 
 }
