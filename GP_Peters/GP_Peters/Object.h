@@ -29,5 +29,6 @@ public:
 	void move(float velX, float velY);
 	void setFinish(bool end);
 	bool getFinish()const { return finish; };
+	void destroy();
 
 };

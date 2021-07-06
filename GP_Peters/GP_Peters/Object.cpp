@@ -58,3 +58,7 @@ void Object::move(float velX, float velY) {
 	dest.y = posY;
 }
 
+void Object::destroy() {
+	tex = nullptr;
+}
+
