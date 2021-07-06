@@ -1,6 +1,7 @@
 #include "Player.h"
 
 
+
 int Player::createCycle(int row, int w, int h, int spriteAmount, int cycleSpeed) {
 	animation tmp;
 	tmp.row = row;
@@ -31,6 +32,14 @@ void Player::updateAnimation() {
 	}
 }
 
-void Player::jumpAnimation() {
+void Player::setSounds(Mix_Chunk* soundJump, Mix_Chunk* soundStep, Mix_Chunk* soundCol) {
+	Player::soundJump = soundJump;
+	Player::soundStep = soundStep;
+	Player::soundCol = soundCol;
+}
 
+void Player::destroySounds() {
+	Mix_FreeChunk(soundCol);
+	Mix_FreeChunk(soundJump);
+	Mix_FreeChunk(soundStep);
 }
