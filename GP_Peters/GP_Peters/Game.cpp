@@ -41,11 +41,11 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		if (renderer) {
 			isRunning = true;
 			//LEVEL
-			level = 1;
+			level = 7;
 			background.setDest(0, 0, width, height);
 			background.setSrc(0, 0, width, height);
 			background.setImg("model/background.png", renderer);
-			player.setDest(120, 652, 28, 58);
+			player.setDest(120, 684, 28, 58);
 			//player.setDest(300, 300, 28, 58);
 			player.setSrc(0, 0, 28, 58);
 			player.setImg("model/GP_Player_sprite.png", renderer);
@@ -144,6 +144,8 @@ void Game::draw(Object o) {
 
 
 void Game::update() {
+	time = (SDL_GetTicks() - startTime) / 1000/60;
+	cout << "Time " << time << endl;
 	if (player.getDest().y < 0) {
 		level++;
 		player.setPos(player.getDest().x, mapHeight);
@@ -298,7 +300,6 @@ void Game::calcMovement() {
 		flPrevTime = flCurTime;
 		flCurTime = SDL_GetTicks();
 		dt = (flCurTime - flPrevTime) * 0.001;
-		cout << dt << endl;
 		if (dt >= 0.015) {
 			dt = 0.015;
 		}
@@ -383,7 +384,6 @@ void Game::calcAir() {
 	if (colision) {
 		colision = false;
 		if (air) {
-			cout << "velX GR " << velDX << endl;
 			velDX = 0;
 			velDY = 0;
 			air = false;
@@ -392,7 +392,7 @@ void Game::calcAir() {
 	}
 	else {
 		air = true;
-		cout << "velX Air " << velDX << " " << velDY <<  " " <<velAir << endl;
+
 	}
 	player.move(0, -1);
 }

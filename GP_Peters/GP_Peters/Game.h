@@ -53,5 +53,7 @@ private:
 	float flPrevTime = 0;
 	float flCurTime = SDL_GetTicks();
 	float dt = 0;
+	float time = 0;
+	float startTime = SDL_GetTicks();
 	Uint32 jumpTimer = 0;
 };
