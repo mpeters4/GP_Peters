@@ -3,13 +3,19 @@
 #include <iostream>
 #include <ctime>
 #include <sstream>
+#include <iomanip> 
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 
 using namespace std;
 
 #define TILE_SIZE 32
 #define MAX_JUMPTIME 1000
 
+SDL_Surface* surf;
+SDL_Texture* tex;
+TTF_Font* font;
+SDL_Color color;
 
 //ANIMATIONS
 int idolL, idolR ,runL,runR ,jumpChargeL ,jumpChargeR ,jumpL ,jumpR;
@@ -39,6 +45,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		window = SDL_CreateWindow(title, x, y, width, height, fs);
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer) {
+			TTF_Init();
 			isRunning = true;
 			//LEVEL
 			level = 8;
@@ -154,8 +161,10 @@ void Game::draw(Object o) {
 
 
 void Game::update() {
+
 	if (!finish) {
 	time = (SDL_GetTicks() - startTime) / 1000/60;
+	}
 	cout << "Time " << time << endl;
 	if (player.getDest().y < 0) {
 		level++;
@@ -186,13 +195,22 @@ void Game::update() {
 
 
 void Game::render() {
+	ostringstream os;
+	os <<"Time: "<< fixed << setprecision(2) << time/1000 << "s";
 	SDL_RenderClear(renderer);
 	draw(background);
+
 	if (!finish) {
 		draw(player);
 		drawMap();
+		renderText(os.str().c_str(), 10, 740, 255, 0,0,18);
 	}
 	
+
+	draw(player);
+	drawMap();
+	
+
 	SDL_RenderPresent(renderer);
 	
 }
@@ -257,6 +275,30 @@ void Game::drawMap() {
 		draw(map[i]);
 	}
 }
+
+void Game::renderText(const char* title, int x, int y, int r, int g, int b, int size) {
+	font = TTF_OpenFont("res/font.ttf", size);
+	color.r = r;
+	color.g = g;
+	color.b = b;
+	color.a = 255;
+	if (!(surf = TTF_RenderText_Solid(font, title, color))) {
+		//handle error here, perhaps print TTF_GetError at least
+	}
+	
+	tex = SDL_CreateTextureFromSurface(renderer, surf);
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = surf->w;
+	rect.h = surf->h;
+	SDL_FreeSurface(surf);
+	SDL_RenderCopy(renderer, tex, NULL, &rect);
+	SDL_DestroyTexture(tex);
+
+
+}
+
 
 
 
@@ -418,6 +460,7 @@ void Game::calcAir() {
 
 
 void Game::clean() {
+
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyTexture(player.getTex());
@@ -432,6 +475,7 @@ void Game::clean() {
 	window = nullptr;
 	renderer = nullptr;
 	bgm = nullptr;
+	TTF_Quit();
 	Mix_Quit();
 	SDL_Quit();
 

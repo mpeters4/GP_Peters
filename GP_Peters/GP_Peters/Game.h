@@ -20,11 +20,11 @@ public:
 	void render();
 	void clean();
 	void draw(Object o);
+	void renderText(const char* title, int x, int y, int r, int g, int b, int size);
 	void initLevel();
 	void loadMap(const char* filename);
 	void drawMap();
 	void calcAir();
-	void calcJump();
 	void calcMovement();
 	bool checkCollision(Object a, Object b);
 	bool running() { return isRunning; };
