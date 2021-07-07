@@ -26,15 +26,32 @@ public:
 	void calcAir();
 	void calcJump();
 	void calcMovement();
-	void playerAnimation();
 	bool checkCollision(Object a, Object b);
 	bool running() { return isRunning; };
 	
-
 private:
 	bool isRunning;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
+	Player player;
+	Object background;
+	Mix_Music* bgm = NULL;
 	int cnt = 0;
 	std::vector<Object> map;
+	int level,mapHeight = 0;
+	//Object player;
+	bool jumpCharge = false;
+	const Uint8* keystate = SDL_GetKeyboardState(NULL);
+	bool air = false;
+	bool jump = false;
+	bool colision = false;
+	bool groundCol = false;
+	//movement
+	int velX, velY, velAir;
+	float velDX, velDY, gravity;
+	//JUMP motion
+	float flPrevTime = 0;
+	float flCurTime = SDL_GetTicks();
+	float dt = 0;
+	Uint32 jumpTimer = 0;
 };

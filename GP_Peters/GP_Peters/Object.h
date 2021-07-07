@@ -9,11 +9,20 @@ private:
 	SDL_Rect dest, src;
 	//SDL_Rect src;
 	SDL_Texture* tex;
-	bool solid;
-	bool finish;
+	bool solid ;
+	bool finish ;
 public:
 	//SDL_Rect dest;
-	Object() { solid = true; };
+	Object() { 
+	solid = true; 
+	finish = false; 
+	posX = 0;
+	posY = 0;
+	velocityX = 0;
+	velocityY = 0;
+	tex = nullptr;
+
+	};
 	SDL_Rect getDest() const { return dest; };
 	SDL_Rect getSrc() const { return src; };
 	SDL_Texture* getTex() const { return tex; };

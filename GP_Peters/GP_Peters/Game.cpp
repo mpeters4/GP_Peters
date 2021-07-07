@@ -10,37 +10,23 @@ using namespace std;
 #define TILE_SIZE 32
 #define MAX_JUMPTIME 1000
 
-Player player;
-Object background;
-Mix_Music* bgm ;
 
-int level;
-int mapHeight;
-//Object player;
-bool jumpCharge = false;
-const Uint8* keystate = SDL_GetKeyboardState(NULL);
-bool air = false;
-bool jump = false;
-bool colision = false;
-bool groundCol = false;
-//movement
-int velX, velY;
-int velAir;
-float velDX, velDY;
-float gravity =0;
-//JUMP motion
-float flPrevTime = 0;
-float flCurTime = SDL_GetTicks();
-float dt;
-Uint32 jumpTimer = 0;
 //ANIMATIONS
 int idolL, idolR ,runL,runR ,jumpChargeL ,jumpChargeR ,jumpL ,jumpR;
 
-
-
-Game::Game() {}
+Game::Game() {
+	velX = 0;
+	velY = 0;
+	velAir = 0;
+	velDX = 0;
+	velDY = 0;
+	gravity = 0;
+	isRunning = false;
+	level = 0;
+	renderer = NULL;
+	window = NULL;
+}
 Game::~Game() {
-
 }
 
 void Game::init(const char* title, int x, int y, int width, int height, bool fullscreen) {
@@ -133,16 +119,8 @@ void Game::eventHandler() {
 			if (jumpCharge) {
 				if (keystate[SDL_SCANCODE_LEFT] && !air) {
 					velDX = -velAir;
-					//velDY = - velY *((SDL_GetTicks() - jumpTimer) * 0.0015);
-					//jumpCharge = false;
 				}else if (keystate[SDL_SCANCODE_RIGHT] && !air) {
 					velDX = velAir;
-					//velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
-					//jumpCharge = false;
-				}
-				else if(!air && !keystate[SDL_SCANCODE_SPACE]) {
-					//velDY = -velY * ((SDL_GetTicks() - jumpTimer) * 0.0015);
-					//jumpCharge = false;
 				}
 				velDY = -velY * ((SDL_GetTicks() - jumpTimer)*2 * 0.0015);
 				jumpCharge = false;
@@ -154,19 +132,16 @@ void Game::eventHandler() {
 	default:
 		break;
 	}
-
 }
 
 void Game::draw(Object o) {
 	SDL_Rect dest = o.getDest();
 	SDL_Rect src = o.getSrc();
 	SDL_RenderCopy(renderer, o.getTex(), &src, &dest);
-	
 }
 
 
 void Game::update() {
-	cout << velDX << endl;
 	if (player.getDest().y < 0) {
 		level++;
 		player.setPos(player.getDest().x, mapHeight);
@@ -186,19 +161,15 @@ void Game::update() {
 	calcMovement();
 	calcAir();
 	player.updateAnimation();
-
 }
 
 
 
 void Game::render() {
-	
 	SDL_RenderClear(renderer);
 	draw(background);
 	draw(player);
 	drawMap();
-	
-	
 	SDL_RenderPresent(renderer);
 	
 }
@@ -227,7 +198,6 @@ void Game::loadMap(const char* filename) {
 	velAir = velX * 1.5;
 	in >> velY;
 	in >> gravity;
-	//cout << w << endl << h << endl << x << endl << y << endl;
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
 			if (in.eof()) {
@@ -238,7 +208,6 @@ void Game::loadMap(const char* filename) {
 			if (current != 0) {
 				tmp.setSrc(((current %10 )*TILE_SIZE), ((current/10))*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 				tmp.setDest((j*TILE_SIZE)+ x, (i*TILE_SIZE) + y, TILE_SIZE, TILE_SIZE);
-				//cout <<"Cur " << current << " X "<<((current/ 10)) * TILE_SIZE << endl;
 				if (current > 39) {
 					tmp.setSolid(false);
 				}
@@ -253,7 +222,6 @@ void Game::loadMap(const char* filename) {
 					tmp.setFinish(false);
 				}
 				map.push_back(tmp);
-				
 			}
 		}
 	}
@@ -354,7 +322,7 @@ void Game::calcMovement() {
 	for (int i = 0; i < map.size(); i++) {
 		if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
 			if (map[i].getFinish()) {
-				isRunning = false();
+				isRunning = false;
 			}
 			player.move(-velDX, 0);
 			if (air) {
@@ -416,14 +384,9 @@ void Game::calcAir() {
 	}
 	else {
 		air = true;
-		
 		cout << "velX Air " << velDX << " " << velAir << endl;
 	}
 	player.move(0, -1);
-}
-
-void Game::playerAnimation() {
-
 }
 
 
@@ -433,11 +396,11 @@ void Game::clean() {
 	SDL_DestroyTexture(player.getTex());
 	player.destroySounds();
 	player.destroy();
-
 	for (int i = 0; i < map.size(); i++) {
 		SDL_DestroyTexture(map[i].getTex());
 		map[i].destroy();
 	}
+	keystate = nullptr;
 	Mix_FreeMusic(bgm);
 	window = nullptr;
 	renderer = nullptr;
