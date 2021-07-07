@@ -45,8 +45,8 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 			background.setDest(0, 0, width, height);
 			background.setSrc(0, 0, width, height);
 			background.setImg("model/background.png", renderer);
-			//player.setDest(120, 652, 28, 58);
-			player.setDest(300, 300, 28, 58);
+			player.setDest(120, 652, 28, 58);
+			//player.setDest(300, 300, 28, 58);
 			player.setSrc(0, 0, 28, 58);
 			player.setImg("model/GP_Player_sprite.png", renderer);
 			player.setCurAnimation(idolR);
