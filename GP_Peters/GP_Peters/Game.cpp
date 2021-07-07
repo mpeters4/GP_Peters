@@ -41,7 +41,7 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		if (renderer) {
 			isRunning = true;
 			//LEVEL
-			level = 7;
+			level = 8;
 			background.setDest(0, 0, width, height);
 			background.setSrc(0, 0, width, height);
 			background.setImg("model/background.png", renderer);
@@ -81,6 +81,15 @@ void Game::eventHandler() {
 		isRunning = false;
 		break;
 	case SDL_KEYDOWN:	
+		if (e.key.keysym.sym == SDLK_n && finish) {
+			level = 1;
+			player.setDest(120, 684, 28, 58);
+			background.setImg("model/background.png", renderer);
+			time = SDL_GetTicks();
+			initLevel();
+			finish = false;
+			
+		}
 		if (keystate[SDL_SCANCODE_RIGHT] && !air && !jumpCharge) {
 			velDX = velX;
 			if (player.getCurAnimation() != runR) {
@@ -112,6 +121,7 @@ void Game::eventHandler() {
 		if (e.key.keysym.sym == SDLK_LEFT && !air && !jumpCharge) {
 			velDX = 0;
 			player.setCurAnimation(idolL);
+			background.setImg("model/background.png", renderer);
 		}
 		else if (e.key.keysym.sym == SDLK_RIGHT && !air && !jumpCharge) {
 			velDX = 0;
@@ -144,6 +154,7 @@ void Game::draw(Object o) {
 
 
 void Game::update() {
+	if (!finish) {
 	time = (SDL_GetTicks() - startTime) / 1000/60;
 	cout << "Time " << time << endl;
 	if (player.getDest().y < 0) {
@@ -165,6 +176,11 @@ void Game::update() {
 	calcMovement();
 	calcAir();
 	player.updateAnimation();
+	}
+	else {
+		background.setImg("model/endScreen.png", renderer);
+	}
+
 }
 
 
@@ -172,8 +188,11 @@ void Game::update() {
 void Game::render() {
 	SDL_RenderClear(renderer);
 	draw(background);
-	draw(player);
-	drawMap();
+	if (!finish) {
+		draw(player);
+		drawMap();
+	}
+	
 	SDL_RenderPresent(renderer);
 	
 }
@@ -331,7 +350,7 @@ void Game::calcMovement() {
 	for (int i = 0; i < map.size(); i++) {
 		if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
 			if (map[i].getFinish()) {
-				isRunning = false;
+				finish = true;
 			}
 			player.move(-velDX, 0);
 			if (air) {

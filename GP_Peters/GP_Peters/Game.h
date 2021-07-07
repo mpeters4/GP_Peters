@@ -46,6 +46,7 @@ private:
 	bool jump = false;
 	bool colision = false;
 	bool groundCol = false;
+	bool finish = false;
 	//movement
 	int velX, velY, velAir;
 	float velDX, velDY, gravity;
