@@ -275,3 +275,18 @@ else if (player.getDest().y > mapHeight) {
 	initLevel();
 }
 ```
+
+#### 05.07.2021 Musik, Geräusche, Spielfeldtexturen und Spielende
+Die letzten Tage wurden hauptsächlich dafür genutzt, dem Spiel eine schönere Optik zu geben. Es wurden Texturen für die Karte und ein Hintergrundbild erstellt. Zusätzlich dazu wurden mit SDL_Mixer Hintergrundmusik und Soundeffekte hinzugefügt. 
+Das Spiel ist zuende, sobald der Affe die Banane berührt. Sobald der Spieler mit diesem Objekt kollidiert, ist das Spiel vorbei. Dafür wurde den Objekten ein weiteres Boolean "finish" zugeordnet.
+
+##### Spielfeldtexturen
+Der Hintergrund ist nun ein Objekt, dass das Hintergrundbild darstellt. Dies wird wie alle anderen Objekte einfach mit der bereits vorhanden draw Funktion in dem Fenster dargestellt. 
+Die Texturen für die Karte wurden von Grund auf erneuert und können weiterhin in den .map Dateien zugeordnet werden. 
+
+##### Musik und Geräusche
+Ganze Songs wie die Hintergrundmusik werden als Mix_Music variable verarbeitet. Kurze Effekte sind als Mix_Chunk zu verarbeiten. Diese werden einfach mit den von SDL_Mixer bereitgestellten Funktionen Mix_LoadMUS für .mp3 bzw. Mix_LoadWAV für .wav Dateien geladen. Mit Mix_PlayMusic wird das geladene Lied abgespielt. Dazu muss die Anzahl der Wiederholungen angegeben werden. Da die Hintergrundmusik nicht aufhören soll zu spielen, wird diesem eine -1 übergeben. In der Player Klasse befinden sich die Spielergeräusche. Diese werden and den benötigten Stellen mithilfe von Mix_PlayChannel abgespielt. Geräusche entstehen bei Kollision in der Luft und beim Springen.
+Die Hintergrundmusik ist von David Fesliyan (https://www.fesliyanstudios.com) und für den nicht-kommerziellen Nutzen lizenzfrei. Die Soundeffekte wurden mit SFXR erstellt.
+
+#### 06.07.2021 Spieltests und dessen Feedback
+Zur zusätzlichen Fehlerbehebung und Optimierung des Spiels habe ich das Spiel an Freunde und Bekannte zum Testen gegeben. Die Kritikpunkte waren die zu lange Dauer bis zum Absprung auf maximaler Höhe und die zu lange Flugzeit. Diese Punkte ließen das Spiel sehr langatmig wirken. Besonders wenn man weit nach unten gestürzt ist, wirkte die langsame Flugzeit sehr frustrierend. Fehler wurden keine gefunden. Aufgrund des Feedbacks habe ich diese Punkte überarbeitet und der Spielfluss wirkt jetzt deutlich angenehmer.
