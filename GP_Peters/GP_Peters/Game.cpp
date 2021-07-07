@@ -40,11 +40,13 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer) {
 			isRunning = true;
+			//LEVEL
 			level = 1;
 			background.setDest(0, 0, width, height);
 			background.setSrc(0, 0, width, height);
 			background.setImg("model/background.png", renderer);
-			player.setDest(120, 652, 28, 58);
+			//player.setDest(120, 652, 28, 58);
+			player.setDest(300, 300, 28, 58);
 			player.setSrc(0, 0, 28, 58);
 			player.setImg("model/GP_Player_sprite.png", renderer);
 			player.setCurAnimation(idolR);
@@ -301,7 +303,13 @@ void Game::calcMovement() {
 			dt = 0.015;
 		}
 
-		velDY = velDY + gravity * dt;
+		if (velDY < gravity) {
+			velDY = velDY + gravity * dt;
+		}
+		else {
+			velDY = gravity;
+		}
+		
 		if (player.getCurAnimation() % 2 == 0) {
 			player.setCurAnimation(jumpL);
 		}
@@ -345,10 +353,10 @@ void Game::calcMovement() {
 		}
 	}
 	if (groundCol) {
-		player.move(velDX, 0);
+		player.move(1, 0);
 		for (int i = 0; i < map.size(); i++) {
 			if (checkCollision(player, map[i]) == 1 && map[i].getSolid()) {
-				player.move(-velDX, 0);
+				player.move(1, 0);
 			}
 		}
 		while (!colision) {
@@ -384,7 +392,7 @@ void Game::calcAir() {
 	}
 	else {
 		air = true;
-		cout << "velX Air " << velDX << " " << velAir << endl;
+		cout << "velX Air " << velDX << " " << velDY <<  " " <<velAir << endl;
 	}
 	player.move(0, -1);
 }
