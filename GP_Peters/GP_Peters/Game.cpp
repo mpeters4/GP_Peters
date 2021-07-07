@@ -12,9 +12,6 @@ using namespace std;
 #define TILE_SIZE 32
 #define MAX_JUMPTIME 1000
 
-SDL_Surface* surf;
-SDL_Texture* tex;
-TTF_Font* font;
 SDL_Color color;
 
 //ANIMATIONS
@@ -88,11 +85,14 @@ void Game::eventHandler() {
 		isRunning = false;
 		break;
 	case SDL_KEYDOWN:	
+		if (e.key.keysym.sym == SDLK_ESCAPE) {
+			isRunning = false;
+		}
 		if (e.key.keysym.sym == SDLK_n && finish) {
 			level = 1;
 			player.setDest(120, 684, 28, 58);
 			background.setImg("model/background.png", renderer);
-			time = SDL_GetTicks();
+			startTime = SDL_GetTicks();
 			initLevel();
 			finish = false;
 			
@@ -163,9 +163,8 @@ void Game::draw(Object o) {
 void Game::update() {
 
 	if (!finish) {
-	time = (SDL_GetTicks() - startTime) / 1000/60;
-	}
-	cout << "Time " << time << endl;
+		time = (SDL_GetTicks() - startTime);
+	
 	if (player.getDest().y < 0) {
 		level++;
 		player.setPos(player.getDest().x, mapHeight);
@@ -196,21 +195,22 @@ void Game::update() {
 
 void Game::render() {
 	ostringstream os;
-	os <<"Time: "<< fixed << setprecision(2) << time/1000 << "s";
+	
 	SDL_RenderClear(renderer);
 	draw(background);
 
 	if (!finish) {
+		os << "Time: " << fixed << setprecision(2) << time /1000<< "s";
 		draw(player);
 		drawMap();
 		renderText(os.str().c_str(), 10, 740, 255, 0,0,18);
 	}
-	
-
-	draw(player);
-	drawMap();
-	
-
+	else {
+		os << "You climbed it in: ";
+		//renderText(os.str().c_str(), SDL_GetWindowSurface(window)->w/4, SDL_GetWindowSurface(window)->h/2+28, 96, 82, 7, 24);
+		os << fixed << setprecision(2) << time / 1000 << "s";
+		renderText(os.str().c_str(), SDL_GetWindowSurface(window)->w / 4.5, SDL_GetWindowSurface(window)->h / 2.5 + 28, 246, 210, 18, 24);
+	}
 	SDL_RenderPresent(renderer);
 	
 }
@@ -277,6 +277,10 @@ void Game::drawMap() {
 }
 
 void Game::renderText(const char* title, int x, int y, int r, int g, int b, int size) {
+	
+SDL_Surface* surf;
+SDL_Texture* tex;
+TTF_Font* font;
 	font = TTF_OpenFont("res/font.ttf", size);
 	color.r = r;
 	color.g = g;
