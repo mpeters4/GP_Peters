@@ -45,11 +45,11 @@ void Game::init(const char* title, int x, int y, int width, int height, bool ful
 			TTF_Init();
 			isRunning = true;
 			//LEVEL
-			level = 8;
+			level = 1;
 			background.setDest(0, 0, width, height);
 			background.setSrc(0, 0, width, height);
 			background.setImg("model/background.png", renderer);
-			player.setDest(120, 684, 28, 58);
+			player.setDest(120, 678, 28, 58);
 			//player.setDest(300, 300, 28, 58);
 			player.setSrc(0, 0, 28, 58);
 			player.setImg("model/GP_Player_sprite.png", renderer);
@@ -90,7 +90,7 @@ void Game::eventHandler() {
 		}
 		if (e.key.keysym.sym == SDLK_n && finish) {
 			level = 1;
-			player.setDest(120, 684, 28, 58);
+			player.setDest(120, 678, 28, 58);
 			background.setImg("model/background.png", renderer);
 			startTime = SDL_GetTicks();
 			initLevel();
