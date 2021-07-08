@@ -203,7 +203,7 @@ void Game::render() {
 		os << "Time: " << fixed << setprecision(2) << time /1000<< "s";
 		draw(player);
 		drawMap();
-		renderText(os.str().c_str(), 10, 740, 255, 0,0,18);
+		renderText(os.str().c_str(), 10, 740, 255, 255,255,18);
 	}
 	else {
 		os << "You climbed it in: ";
