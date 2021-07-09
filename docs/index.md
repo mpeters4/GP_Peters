@@ -276,17 +276,35 @@ else if (player.getDest().y > mapHeight) {
 }
 ```
 
-#### 05.07.2021 Musik, Geräusche, Spielfeldtexturen und Spielende
+### 05.07.2021 Musik, Geräusche, Spielfeldtexturen und Spielende
 Die letzten Tage wurden hauptsächlich dafür genutzt, dem Spiel eine schönere Optik zu geben. Es wurden Texturen für die Karte und ein Hintergrundbild erstellt. Zusätzlich dazu wurden mit SDL_Mixer Hintergrundmusik und Soundeffekte hinzugefügt. 
 Das Spiel ist zuende, sobald der Affe die Banane berührt. Sobald der Spieler mit diesem Objekt kollidiert, ist das Spiel vorbei. Dafür wurde den Objekten ein weiteres Boolean "finish" zugeordnet.
 
-##### Spielfeldtexturen
+#### Spielfeldtexturen
 Der Hintergrund ist nun ein Objekt, dass das Hintergrundbild darstellt. Dies wird wie alle anderen Objekte einfach mit der bereits vorhanden draw Funktion in dem Fenster dargestellt. 
 Die Texturen für die Karte wurden von Grund auf erneuert und können weiterhin in den .map Dateien zugeordnet werden. 
 
-##### Musik und Geräusche
+#### Musik und Geräusche
 Ganze Songs wie die Hintergrundmusik werden als Mix_Music variable verarbeitet. Kurze Effekte sind als Mix_Chunk zu verarbeiten. Diese werden einfach mit den von SDL_Mixer bereitgestellten Funktionen Mix_LoadMUS für .mp3 bzw. Mix_LoadWAV für .wav Dateien geladen. Mit Mix_PlayMusic wird das geladene Lied abgespielt. Dazu muss die Anzahl der Wiederholungen angegeben werden. Da die Hintergrundmusik nicht aufhören soll zu spielen, wird diesem eine -1 übergeben. In der Player Klasse befinden sich die Spielergeräusche. Diese werden and den benötigten Stellen mithilfe von Mix_PlayChannel abgespielt. Geräusche entstehen bei Kollision in der Luft und beim Springen.
 Die Hintergrundmusik ist von David Fesliyan (https://www.fesliyanstudios.com) und für den nicht-kommerziellen Nutzen lizenzfrei. Die Soundeffekte wurden mit SFXR erstellt.
 
-#### 06.07.2021 Spieltests und dessen Feedback
+### 06.07.2021 Spieltests und dessen Feedback
 Zur zusätzlichen Fehlerbehebung und Optimierung des Spiels habe ich das Spiel an Freunde und Bekannte zum Testen gegeben. Die Kritikpunkte waren die zu lange Dauer bis zum Absprung auf maximaler Höhe und die zu lange Flugzeit. Diese Punkte ließen das Spiel sehr langatmig wirken. Besonders wenn man weit nach unten gestürzt ist, wirkte die langsame Flugzeit sehr frustrierend. Fehler wurden keine gefunden. Aufgrund des Feedbacks habe ich diese Punkte überarbeitet und der Spielfluss wirkt jetzt deutlich angenehmer.
+
+### 07.07.2021 Zeit anzeigen, Endbildschirm, und Fazit
+
+#### Zeit anzeigen
+Zum anzeigen der aktuellen Zeit wurde die Funktion renderText erstellt. Diese nutzt die SDL Bibliothek von "SDL_ttf". Das Verarbeiten von Text ist ähnlich zu dem einer Bildverarbeitung mit SDL. Eine .ttf Datei bestimmt die Schriftart. Es wird ein SDL_Surface erstellt. Mit TTF_RenderText_Solid wird die gegebene Zeichenkette in der gewünschten Schriftart und Farbe als SDL_Surface geladen. Dieses wird jetzt wie eine Bilddatei als SDL_Texture gerendert und mit SDL_RenderCopy an die entsprechende Stelle im Fenster platziert.
+
+#### Endbildschirm
+Sobald der Spieler mit der Banane kollidiert, wird das Laden einer Karte in der update Funktion übersprungen und es wird nur noch der Endbildschirm als Hintergrund geladen. Auf diesem wird jetzt die Zeit mit renderText anzeigt. Mit der Taste n kann jetzt das Spiel auf den Startzustand gesetzt werden, um neu zu starten.
+
+#### Fazit 
+Das Projekt "climb it" ist nach meinem empfinden überwiegend positiv verlaufen. Das Spiel und dessen Ablauf entspricht ziemlich genau den Vorstellungen vor Implementierung des Projektes. Die Durchführung lief bis auf keine Rückschläge problemlos und ich konnte kontinuierlich Fortschritte erzielen. Meine größte Sorge war die Physik des Spiels. Das hat sich während der Umsetzung auch bestätigt. Die Sprungkurve genau so zu gestalten, wie sie jetzt ist, hat wie erwartet sehr viel Zeit in Anspruch genommen. Aufgrund dessen habe ich es leider nicht mehr geschafft, alle von mir gewünschten Funktionen des Spiels zu implementieren. 
+<br/>Folgende Ideen hätte ich gerne noch umgesetzt:<br/>
+Ich hätte gerne ein Startmenü implementiert. In diesem sollte auch eine Highscoreliste zu finden sein. Die Bestzeiten hätten dafür in einer Datei gespeichert werden sollen. Zusätzlich dazu hätte ich gerne noch weitere Blöcke mit anderen Auswirkungen auf den Spieler hinzugefügt. Beispielsweise ein Weltraumgebiet mit einer veränderten Schwerkraft oder Blocke, die den Spieler anders abprallen lassen. Die gesamte Struktur dafür ist bereits vorhanden. Allerdings hat die Zeit gefehlt, um diese Blöcke und Hintergründe noch zu zeichnen.
+
+### Erklärung der Steuerung
+
+Für das Spiel sind die Tasten "Links" "Rechts" und die "Leertaste" notwendig.
+Mit den Richtungstasten kann die Figur bewegt werden, solange diese sich auf dem Boden befindet. Sobald die Leertaste gedrückt wird, lädt sich der Sprung auf. Nach dem Loslassen oder nach zwei Sekunden springt die Figur los. Die Sprungrichtung kann bestimmt werden, indem beim Absprung eine der Richtungstasten gedrückt wird. Sobald sich die Figur in der Luft befindet, kann der Sprungverlauf nicht weiter beeinflusst werden.
