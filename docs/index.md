@@ -308,3 +308,5 @@ Ich hätte gerne ein Startmenü implementiert. In diesem sollte auch eine Highsc
 
 Für das Spiel sind die Tasten "Links" "Rechts" und die "Leertaste" notwendig.
 Mit den Richtungstasten kann die Figur bewegt werden, solange diese sich auf dem Boden befindet. Sobald die Leertaste gedrückt wird, lädt sich der Sprung auf. Nach dem Loslassen oder nach zwei Sekunden springt die Figur los. Die Sprungrichtung kann bestimmt werden, indem beim Absprung eine der Richtungstasten gedrückt wird. Sobald sich die Figur in der Luft befindet, kann der Sprungverlauf nicht weiter beeinflusst werden.
+
+<br/>Viel Spaß beim Testen
